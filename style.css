@@ -339,6 +339,12 @@
       border-left: 4px solid var(--current-green);
     }
     .schedule-table tr.current-week td{ border-bottom-color: rgba(16,185,129,.22); }
+    .week-num{
+      font-family: "Syne", system-ui, sans-serif;
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 1rem;
+    }
 
     /* New Week Banner */
     .new-week-banner{
