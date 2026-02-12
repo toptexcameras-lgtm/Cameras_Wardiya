@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shift Schedule Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side-nav" aria-label="Navigation">
+      <div class="brand">
+        <div class="brand-title">Wardiyaa</div>
+        <div class="brand-sub">Weekly rotation</div>
+      </div>
+
+      <button class="nav-item active" data-tab="dashboard">
+        <span class="nav-ico">📌</span>
+        <span class="nav-txt">Dashboard</span>
+      </button>
+
+      <button class="nav-item" data-tab="schedule">
+        <span class="nav-ico">📅</span>
+        <span class="nav-txt">Full Schedule</span>
+      </button>
+
+      <div class="nav-hint">
+        <div class="hint-title">Tip</div>
+        <div class="hint-text">On phone, cards are medium size &amp; easy to read. Current week is highlighted.</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div id="dashboard" class="tab-content active">
+      <div class="dashboard-wrapper"><div class="dashboard" id="dashboardContent"></div>
+    </div>
+      <div id="schedule" class="tab-content">
+      <div class="schedule-section">
+        <div class="schedule-controls">
+          <button class="filter-btn" data-person="Ahmed">Ahmed</button>
+          <button class="filter-btn" data-person="Yousef">Yousef</button>
+          <button class="filter-btn" data-person="Omar">Omar</button>
+          <button class="filter-btn" data-clear="1">Clear</button>
+          <button class="action-btn" id="goCurrentBtn">Go to Current Week</button>
+        </div>
+
+        <div style="overflow-x:auto;border-radius:10px;">
+          <table class="schedule-table" id="scheduleTable">
+            <thead>
+              <tr>
+                <th>Week #</th>
+                <th>Start (Sat)</th>
+                <th>End (Thu)</th>
+                <th>First</th>
+                <th>Second</th>
+                <th>Third</th>
+                <th>Friday</th>
+              </tr>
+            </thead>
+            <tbody id="scheduleBody"></tbody>
+          </table>
+        </div>
+      </div></div>
+    </main>
+  </div>
+
+  <div id="newWeekBanner" class="new-week-banner">🎉 New Week Started!</div>
+  <script src="app.js"></script>
+</body>
+</html>
