@@ -27,7 +27,7 @@
 
       <div class="nav-hint">
         <div class="hint-title">Tip</div>
-        <div class="hint-text">On phone, if view is not comfortabl make view as desktop. Current week is highlighted.</div>
+        <div class="hint-text">Swipe cards on mobile. Current week is highlighted.</div>
       </div>
     </aside>
 
@@ -35,14 +35,16 @@
       <div id="dashboard" class="tab-content active">
         <div class="dashboard" id="dashboardContent"></div>
       </div>
+      
       <div id="schedule" class="tab-content">
         <div class="schedule-section">
           <div class="schedule-controls">
             <button class="action-btn" id="goCurrentBtn">Go to Current Week</button>
-          
-<input id="dateSearch" class="date-search" type="date" aria-label="Search by date" />
-<button class="filter-btn" id="clearDateBtn" type="button">Clear Date</button>
-</div>
+            <input id="dateSearch" class="date-search" type="date" aria-label="Search by date" />
+            <button class="filter-btn" id="clearDateBtn" type="button">Clear Date</button>
+          </div>
+
+          <div class="scroll-hint">👉 Swipe left/right to see all columns</div>
 
           <div style="overflow-x:auto;border-radius:10px;">
             <table class="schedule-table" id="scheduleTable">
