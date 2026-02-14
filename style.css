@@ -34,6 +34,22 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: direction 0.3s ease;
+}
+
+body[dir="rtl"] {
+  direction: rtl;
+  font-family: "Work Sans", "Cairo", "Tajawal", system-ui, sans-serif;
+}
+
+body[dir="rtl"] .app-shell {
+  grid-template-columns: 1fr 240px;
+}
+
+@media (max-width: 820px) {
+  body[dir="rtl"] .app-shell {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* =========================================
@@ -399,6 +415,22 @@ body {
   color: #b45309;
 }
 
+.week-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(37,99,235,.06);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  border: 1px solid rgba(37,99,235,.15);
+}
+
+body[dir="rtl"] .week-note {
+  text-align: center;
+}
+
 /* =========================================
    SCHEDULE TABLE
    ========================================= */
@@ -637,8 +669,8 @@ body {
     scroll-snap-type: x mandatory !important;
     scroll-behavior: smooth !important;
     -webkit-overflow-scrolling: touch !important;
-    gap: 12px !important;
-    padding: 8px 12px !important;
+    gap: 10px !important;
+    padding: 4px 8px !important;
     margin: 0 -12px !important;
   }
 
@@ -651,19 +683,20 @@ body {
     scrollbar-width: none;
   }
 
-  /* Smaller, more compact cards */
+  /* Larger cards that fit phone screen better - 90% width */
   .week-card {
-    flex: 0 0 75% !important;
+    flex: 0 0 90% !important;
     scroll-snap-align: center !important;
     scroll-snap-stop: always !important;
-    padding: 14px !important;
-    max-width: 280px !important;
-    border-radius: 14px !important;
+    padding: 16px 12px !important;
+    max-width: 100% !important;
+    border-radius: 16px !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
   .week-card.current {
-    flex: 0 0 78% !important;
-    transform: scale(1.02) !important;
+    flex: 0 0 92% !important;
+    transform: scale(1.0) !important;
     border-width: 3px !important;
     box-shadow: 0 12px 28px rgba(16,185,129,.28) !important;
   }
@@ -672,8 +705,8 @@ body {
   .week-card.last::before,
   .week-card.next::before {
     top: -8px !important;
-    font-size: 0.6rem !important;
-    padding: 5px 10px !important;
+    font-size: 0.65rem !important;
+    padding: 6px 12px !important;
     max-width: calc(100% - 16px);
     white-space: normal;
     text-align: center;
@@ -681,42 +714,49 @@ body {
   }
 
   .date-range {
-    font-size: 0.8rem !important;
-    padding: 8px !important;
-    margin-bottom: 10px !important;
+    font-size: 0.9rem !important;
+    padding: 10px !important;
+    margin-bottom: 12px !important;
   }
 
   .shift-grid {
     grid-template-columns: 1fr !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
 
   .shift-item {
-    padding: 8px !important;
+    padding: 10px 8px !important;
   }
 
   .shift-role {
-    font-size: 0.65rem !important;
-    margin-bottom: 6px !important;
-    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+    margin-bottom: 7px !important;
+    padding: 4px 8px !important;
   }
 
   .shift-person {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
   }
 
   .person-badge {
-    padding: 5px 10px !important;
-    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+    font-size: 0.88rem !important;
   }
 
   .off-badge {
-    padding: 6px 12px !important;
-    font-size: 0.75rem !important;
+    padding: 8px 14px !important;
+    font-size: 0.85rem !important;
   }
 
   .off-note {
-    font-size: 0.7rem !important;
+    font-size: 0.75rem !important;
+    margin-top: 8px !important;
+  }
+
+  .week-note {
+    margin-top: 12px !important;
+    padding: 8px 10px !important;
+    font-size: 0.75rem !important;
   }
 
   /* Banner */
@@ -730,19 +770,22 @@ body {
 
   /* Schedule Section */
   .schedule-section {
-    padding: 10px !important;
-    margin: 0 -12px;
-    border-radius: 0 !important;
+    padding: 12px 8px !important;
+    margin: 0;
+    border-radius: 12px !important;
   }
 
   .schedule-controls {
     gap: 8px;
-    padding: 0 12px;
+    padding: 0 4px;
+    margin-bottom: 12px;
   }
 
   .action-btn, .filter-btn {
     padding: 10px 14px;
     font-size: 0.85rem;
+    flex: 1;
+    min-width: auto;
   }
 
   .date-search {
@@ -751,86 +794,102 @@ body {
     font-size: 0.85rem;
   }
 
-  /* Full-width scrollable table container */
+  /* Improved mobile table - full width with horizontal scroll */
   .schedule-section > div {
-    margin: 0 !important;
-    border-radius: 0 !important;
-  }
-
-  /* Make table scrollable with full row visibility */
-  .schedule-table {
-    font-size: 0.85rem;
-    min-width: 100%;
-    display: block;
+    margin: 0 -8px !important;
+    border-radius: 8px !important;
     overflow-x: auto;
-    white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
 
-  .schedule-table thead,
-  .schedule-table tbody {
-    display: table;
+  .schedule-table {
+    font-size: 0.8rem;
     width: 100%;
-    table-layout: fixed;
-  }
-
-  .schedule-table thead {
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    min-width: 700px; /* Ensures table is wide enough */
   }
 
   .schedule-table th,
   .schedule-table td {
-    padding: 12px 10px;
-    min-width: 85px;
-    text-align: left;
+    padding: 10px 8px;
+    white-space: nowrap;
   }
 
+  /* Week number column - sticky */
   .schedule-table th:first-child,
   .schedule-table td:first-child {
-    min-width: 70px;
     position: sticky;
     left: 0;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    z-index: 5;
+    z-index: 3;
+    background: inherit;
+    font-weight: 700;
+    min-width: 65px;
   }
 
-  .schedule-table td:first-child {
+  .schedule-table thead th:first-child {
+    background: var(--primary);
+  }
+
+  .schedule-table tbody td:first-child {
     background: #fff;
-    font-weight: 700;
-    border-right: 2px solid var(--border);
+    box-shadow: 2px 0 4px rgba(0,0,0,0.05);
   }
 
   .schedule-table tbody tr.current-week td:first-child {
-    background: rgba(16,185,129,.16) !important;
+    background: rgba(16,185,129,.16);
   }
 
   .schedule-table th {
+    font-size: 0.7rem;
+    padding: 12px 8px;
+  }
+
+  /* Date columns */
+  .schedule-table th:nth-child(2),
+  .schedule-table th:nth-child(3),
+  .schedule-table td:nth-child(2),
+  .schedule-table td:nth-child(3) {
+    min-width: 85px;
     font-size: 0.75rem;
-    padding: 14px 10px;
+  }
+
+  /* Person columns */
+  .schedule-table th:nth-child(4),
+  .schedule-table th:nth-child(5),
+  .schedule-table th:nth-child(6),
+  .schedule-table td:nth-child(4),
+  .schedule-table td:nth-child(5),
+  .schedule-table td:nth-child(6) {
+    min-width: 90px;
+  }
+
+  /* Notes column */
+  .schedule-table th:nth-child(7),
+  .schedule-table td:nth-child(7) {
+    min-width: 130px;
+    max-width: 180px;
   }
 
   /* Make person badges more compact on mobile */
   .schedule-table .person-badge {
-    font-size: 0.75rem;
-    padding: 4px 8px;
+    font-size: 0.72rem;
+    padding: 4px 10px;
     white-space: nowrap;
+    display: inline-block;
   }
 
   /* Better row highlighting */
-  .schedule-table tbody tr {
-    border-bottom: 1px solid var(--border);
-  }
-
   .schedule-table tbody tr:hover {
-    background: rgba(37,99,235,.06);
+    background: rgba(37,99,235,.05);
   }
 
   /* Current week row - more visible */
   .schedule-table tbody tr.current-week {
-    background: linear-gradient(90deg, rgba(16,185,129,.20), rgba(16,185,129,.08)) !important;
+    background: linear-gradient(90deg, rgba(16,185,129,.18), rgba(16,185,129,.06)) !important;
     border-left: 4px solid var(--current-green);
+  }
+
+  .schedule-table tbody tr.current-week:hover {
+    background: linear-gradient(90deg, rgba(16,185,129,.22), rgba(16,185,129,.08)) !important;
   }
 }
 
