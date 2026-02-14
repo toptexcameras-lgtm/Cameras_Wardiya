@@ -5,6 +5,64 @@ const START_DATE = new Date(2026, 0, 3); // Saturday, Jan 03, 2026
 const TOTAL_WEEKS = 52;
 
 // =============================
+// Language Support
+// =============================
+let currentLang = localStorage.getItem('wardiya_lang') || 'en';
+
+const translations = {
+  en: {
+    'Last Week': 'Last Week',
+    'Current Week': 'Current Week',
+    'Next Week': 'Next Week',
+    'First Shift': 'First Shift',
+    'Second Shift': 'Second Shift',
+    'Third Shift': 'Third Shift',
+    'OFF': 'OFF',
+    'Holiday!': 'Holiday!',
+    'Regular OFF': 'Regular OFF',
+    'Expected official holiday': 'Expected official holiday',
+    'Not Available': 'Not Available',
+    'Week': 'Week'
+  },
+  ar: {
+    'Last Week': 'الأسبوع الماضي',
+    'Current Week': 'الأسبوع الحالي',
+    'Next Week': 'الأسبوع القادم',
+    'First Shift': 'الوردية الأولى',
+    'Second Shift': 'الوردية الثانية',
+    'Third Shift': 'الوردية الثالثة',
+    'OFF': 'إجازة',
+    'Holiday!': 'عطلة رسمية!',
+    'Regular OFF': 'إجازة عادية',
+    'Expected official holiday': 'متوقع إجازة رسمية',
+    'Not Available': 'غير متاح',
+    'Week': 'أسبوع'
+  }
+};
+
+function t(key) {
+  return translations[currentLang][key] || key;
+}
+
+function toggleLanguage() {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  localStorage.setItem('wardiya_lang', currentLang);
+  
+  // Update HTML direction
+  document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+  
+  // Update all elements with translations
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.getAttribute(`data-${currentLang}`);
+  });
+  
+  // Re-render content
+  let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
+  renderDashboard(fullSchedule, currentWeekIndex);
+  renderScheduleTable(fullSchedule, currentWeekIndex);
+}
+
+// =============================
 // Official Holidays (Expected OFF)
 // =============================
 const HOLIDAYS_DEFAULT = [
@@ -167,9 +225,9 @@ function renderDashboard(schedule, currentWeekIndex) {
   }
 
   const cards = [
-    { index: lastWeekIndex, label: "Last Week", pos: "last" },
-    { index: currentWeekIndexDisplay, label: "Current Week", pos: "current" },
-    { index: nextWeekIndex, label: "Next Week", pos: "next" }
+    { index: lastWeekIndex, label: t("Last Week"), pos: "last" },
+    { index: currentWeekIndexDisplay, label: t("Current Week"), pos: "current" },
+    { index: nextWeekIndex, label: t("Next Week"), pos: "next" }
   ];
 
   const holidays = getHolidaySet();
@@ -178,7 +236,7 @@ function renderDashboard(schedule, currentWeekIndex) {
     if (c.index < 0 || c.index >= schedule.length) {
       const empty = document.createElement("div");
       empty.className = "week-card empty-card";
-      empty.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary)">Not Available</div>`;
+      empty.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary)">${t('Not Available')}</div>`;
       container.appendChild(empty);
       return;
     }
@@ -198,7 +256,11 @@ function renderDashboard(schedule, currentWeekIndex) {
     offDate.setDate(offDate.getDate() + 1); // Friday
     const offDateStr = formatDate(offDate);
     const isHoliday = holidays.has(offDateStr);
-    const offNote = isHoliday ? `<div class="off-note holiday">🎉 Holiday!</div>` : '';
+    const offNote = isHoliday ? `<div class="off-note holiday">🎉 ${t('Holiday!')}</div>` : '';
+    
+    // Add week note if it's a holiday week
+    const weekNote = isHoliday ? 
+      `<div class="week-note">ℹ️ ${t('Expected official holiday')}</div>` : '';
 
     card.innerHTML = `
       <div class="week-header">
@@ -208,23 +270,24 @@ function renderDashboard(schedule, currentWeekIndex) {
 
       <div class="shift-grid">
         <div class="shift-item">
-          <span class="shift-role">First Shift</span>
+          <span class="shift-role">${t('First Shift')}</span>
           <span class="shift-person person-badge ${getPersonClass(week.first)}">${week.first}</span>
         </div>
         <div class="shift-item">
-          <span class="shift-role">Second Shift</span>
+          <span class="shift-role">${t('Second Shift')}</span>
           <span class="shift-person person-badge ${getPersonClass(week.second)}">${week.second}</span>
         </div>
         <div class="shift-item">
-          <span class="shift-role">Third Shift</span>
+          <span class="shift-role">${t('Third Shift')}</span>
           <span class="shift-person person-badge ${getPersonClass(week.third)}">${week.third}</span>
         </div>
       </div>
 
       <div style="margin-top:12px;text-align:center;">
-        <span class="off-badge">🌴 OFF</span>
+        <span class="off-badge">🌴 ${t('OFF')}</span>
         ${offNote}
       </div>
+      ${weekNote}
     `;
     container.appendChild(card);
   });
@@ -262,10 +325,12 @@ function renderScheduleTable(schedule, currentWeekIndex) {
     offDate.setDate(offDate.getDate() + 1); // Friday
     const offDateStr = formatDate(offDate);
     const isHoliday = holidays.has(offDateStr);
-    const noteText = isHoliday ? "🎉 Holiday" : "";
+    const noteText = isHoliday ? 
+      `🎉 ${t('Expected official holiday')}` : 
+      t('Regular OFF');
 
     row.innerHTML = `
-      <td><strong>Week ${week.weekNumber}</strong></td>
+      <td><strong>${t('Week')} ${week.weekNumber}</strong></td>
       <td>${week.weekStartFormatted}</td>
       <td>${week.weekEndFormatted}</td>
       <td><span class="person-badge ${getPersonClass(week.first)}">${week.first}</span></td>
@@ -438,6 +503,12 @@ function applyDateSearch() {
 // Initialization
 // =============================
 function init() {
+  // Set initial language
+  document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.getAttribute(`data-${currentLang}`);
+  });
+
   fullSchedule = generateSchedule();
   let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
 
@@ -445,9 +516,20 @@ function init() {
   renderScheduleTable(fullSchedule, currentWeekIndex);
   checkNewWeek(fullSchedule);
 
+  // Language toggle
+  const langToggle = document.getElementById("langToggle");
+  if (langToggle) {
+    langToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleLanguage();
+    });
+  }
+
   // Tab navigation
   document.querySelectorAll(".nav-item").forEach(btn => {
-    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    if (btn.id !== "langToggle") {
+      btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    }
   });
 
   // "Go to Current Week" button
