@@ -262,7 +262,7 @@ function renderScheduleTable(schedule, currentWeekIndex) {
     offDate.setDate(offDate.getDate() + 1); // Friday
     const offDateStr = formatDate(offDate);
     const isHoliday = holidays.has(offDateStr);
-    const noteText = isHoliday ? "🎉 Holiday" : "Regular OFF";
+    const noteText = isHoliday ? "🎉 Holiday" : "";
 
     row.innerHTML = `
       <td><strong>Week ${week.weekNumber}</strong></td>
