@@ -587,18 +587,6 @@ body[dir="rtl"] .week-note {
     gap: 8px;
     padding: 12px;
     border-radius: 16px;
-
-    padding: 10px 12px;
-    border-radius: 999px;
-
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow:
-      0 18px 50px rgba(0, 0, 0, 0.55),
-      0 2px 8px rgba(0, 0, 0, 0.35);
   }
 
   .brand, .nav-hint { display: none; }
@@ -608,30 +596,7 @@ body[dir="rtl"] .week-note {
     justify-content: center;
     padding: 12px 8px;
     font-size: 0.85rem;
-    border-radius: 999px;
-
-    color: rgba(255,255,255,0.82);
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
-
-    transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
   }
-  .nav-item:hover {
-    background: rgba(255,255,255,0.10);
-    color: rgba(255,255,255,0.92);
-  }
-
-  .nav-item:active {
-    transform: translateY(1px) scale(0.99);
-  }
-
-  .nav-item.active {
-    color: #fff;
-    border-color: rgba(255,255,255,0.18);
-    background: linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
-    box-shadow: 0 10px 22px rgba(0,0,0,0.35);
-  }
-
 
   .main-content { padding-bottom: 90px; }
 
