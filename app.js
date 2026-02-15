@@ -220,7 +220,7 @@ function renderDashboard(schedule, currentWeekIndex) {
       </div>
 
       <div style="margin-top:12px;text-align:center;">
-        <span class="off-badge">OFF</span>
+        
         ${isHoliday ? `<div class="off-note holiday">🎉 Holiday!</div>` : ``}
       </div>
 
