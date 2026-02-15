@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shift Schedule Manager</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Work+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Tex - Shift Schedule</title>
+   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Work+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-shell">
-    <aside class="side-nav" aria-label="Navigation">
+    <aside class="side-nav">
       <div class="brand">
-        <div class="brand-title">Wardiyaa</div>
-        <div class="brand-sub">Weekly rotation</div>
+        <div class="brand-title">Top Tex</div>
+        <div class="brand-sub">Weekly Rotation</div>
       </div>
 
       <button class="nav-item active" data-tab="dashboard">
@@ -40,20 +40,17 @@
         <div class="schedule-section">
           <div class="schedule-controls">
             <button class="action-btn" id="goCurrentBtn">Go to Current Week</button>
-            <input id="dateSearch" class="date-search" type="date" aria-label="Search by date" />
-            <button class="filter-btn" id="clearDateBtn" type="button">Clear Date</button>
+            <input id="dateSearch" class="date-search" type="date">
+            <button class="filter-btn" id="clearDateBtn">Clear Date</button>
           </div>
-
           <div class="scroll-hint">👉 Swipe to see all info</div>
-
-          <div id="scheduleContainer" class="schedule-container"></div>
+          <div id="scheduleContainer"></div>
         </div>
       </div>
     </main>
   </div>
 
   <div id="newWeekBanner" class="new-week-banner">🎉 New Week Started!</div>
-
   <script src="app.js"></script>
 </body>
 </html>
