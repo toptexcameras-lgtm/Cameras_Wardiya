@@ -11,28 +11,23 @@
   <div class="app-shell">
     <aside class="side-nav" aria-label="Navigation">
       <div class="brand">
-        <div class="brand-title" data-en="Wardiyaa" data-ar="ورديّة">Wardiyaa</div>
-        <div class="brand-sub" data-en="Weekly rotation" data-ar="تناوب أسبوعي">Weekly rotation</div>
+        <div class="brand-title">Wardiyaa</div>
+        <div class="brand-sub">Weekly rotation</div>
       </div>
 
       <button class="nav-item active" data-tab="dashboard">
         <span class="nav-ico">📌</span>
-        <span class="nav-txt" data-en="Dashboard" data-ar="لوحة التحكم">Dashboard</span>
+        <span class="nav-txt">Dashboard</span>
       </button>
 
       <button class="nav-item" data-tab="schedule">
         <span class="nav-ico">📅</span>
-        <span class="nav-txt" data-en="Full Schedule" data-ar="الجدول الكامل">Full Schedule</span>
-      </button>
-
-      <button class="nav-item lang-toggle" id="langToggle">
-        <span class="nav-ico">🌐</span>
-        <span class="nav-txt" data-en="العربية" data-ar="English">العربية</span>
+        <span class="nav-txt">Full Schedule</span>
       </button>
 
       <div class="nav-hint">
-        <div class="hint-title" data-en="Tip" data-ar="نصيحة">Tip</div>
-        <div class="hint-text" data-en="Swipe cards on mobile. Current week is highlighted." data-ar="مرر البطاقات على الجوال. الأسبوع الحالي مميز.">Swipe cards on mobile. Current week is highlighted.</div>
+        <div class="hint-title">Tip</div>
+        <div class="hint-text">Swipe cards on mobile. Current week is highlighted.</div>
       </div>
     </aside>
 
@@ -44,29 +39,14 @@
       <div id="schedule" class="tab-content">
         <div class="schedule-section">
           <div class="schedule-controls">
-            <button class="action-btn" id="goCurrentBtn" data-en="Go to Current Week" data-ar="الذهاب للأسبوع الحالي">Go to Current Week</button>
+            <button class="action-btn" id="goCurrentBtn">Go to Current Week</button>
             <input id="dateSearch" class="date-search" type="date" aria-label="Search by date" />
-            <button class="filter-btn" id="clearDateBtn" type="button" data-en="Clear Date" data-ar="مسح التاريخ">Clear Date</button>
+            <button class="filter-btn" id="clearDateBtn" type="button">Clear Date</button>
           </div>
 
-          <div class="scroll-hint" data-en="👉 Swipe left/right to see all columns" data-ar="👉 مرر يمين/يسار لرؤية جميع الأعمدة">👉 Swipe left/right to see all columns</div>
+          <div class="scroll-hint">👉 Swipe to see all info</div>
 
-          <div style="overflow-x:auto;border-radius:10px;">
-            <table class="schedule-table" id="scheduleTable">
-              <thead>
-                <tr>
-                  <th data-en="Week #" data-ar="أسبوع #">Week #</th>
-                  <th data-en="Start (Sat)" data-ar="البداية (سبت)">Start (Sat)</th>
-                  <th data-en="End (Thu)" data-ar="النهاية (خميس)">End (Thu)</th>
-                  <th data-en="First" data-ar="الأول">First</th>
-                  <th data-en="Second" data-ar="الثاني">Second</th>
-                  <th data-en="Third" data-ar="الثالث">Third</th>
-                  <th data-en="Notes" data-ar="ملاحظات">Notes</th>
-                </tr>
-              </thead>
-              <tbody id="scheduleBody"></tbody>
-            </table>
-          </div>
+          <div id="scheduleContainer" class="schedule-container"></div>
         </div>
       </div>
     </main>
