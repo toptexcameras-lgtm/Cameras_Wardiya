@@ -1,0 +1,907 @@
+:root {
+  --primary: #2563eb;
+  --secondary: #7c3aed;
+  --dark: #1e293b;
+  --light: #f8fafc;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --shadow-card: 0 1px 3px 0 rgba(0,0,0,.10), 0 1px 2px 0 rgba(0,0,0,.06);
+  --shadow-hover: 0 10px 15px -3px rgba(0,0,0,.10), 0 4px 6px -2px rgba(0,0,0,.05);
+  --current-green: #10b981;
+  --current-green-light: #d1fae5;
+  --last-gray: #6b7280;
+  --last-gray-light: #f3f4f6;
+  --next-red: #ef4444;
+  --next-red-light: #fee2e2;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Work Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  /* mobile browsers: dynamic viewport (address bar) */
+  min-height: 100dvh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Sidebar */
+.side-nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 24px 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.brand {
+  margin-bottom: 32px;
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+}
+
+.brand-title {
+  font-family: "Syne", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.brand-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav-item:hover {
+  background: var(--light);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.nav-ico { font-size: 1.2rem; }
+
+.nav-hint {
+  margin-top: 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-radius: 12px;
+  border: 1px solid #fbbf24;
+}
+
+.hint-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #92400e;
+  margin-bottom: 6px;
+}
+
+.hint-text {
+  font-size: 0.8rem;
+  color: #78350f;
+  line-height: 1.4;
+}
+
+/* Main Content */
+.main-content { min-height: 80vh; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Dashboard */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.week-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  transition: transform .25s ease, box-shadow .25s ease;
+  position: relative;
+}
+
+.week-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.week-card.empty-card {
+  opacity: 0.55;
+  border: 2px dashed var(--border);
+  background: var(--light);
+}
+
+/* Current Week */
+.week-card.current {
+  border: 3px solid var(--current-green);
+  box-shadow: 0 14px 30px rgba(16,185,129,.30);
+  transform: translateY(-4px) scale(1.05);
+  background: linear-gradient(135deg, #ffffff 0%, var(--current-green-light) 100%);
+}
+
+.week-card.current::before {
+  content: "🌟 CURRENT WEEK";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--current-green), #059669);
+  color: #fff;
+  padding: 6px 16px;
+  font-weight: 800;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(16,185,129,.45);
+  animation: pulse-green 2s infinite;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 4px 16px rgba(16,185,129,.45); }
+  50% { box-shadow: 0 6px 26px rgba(16,185,129,.75); }
+}
+
+.week-card.current .week-label::before {
+  content: "★ ";
+  color: var(--current-green);
+  animation: rotate-star 3s linear infinite;
+  display: inline-block;
+}
+
+@keyframes rotate-star {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+
+/* Last Week */
+.week-card.last {
+  border: 2px solid var(--last-gray);
+  background: linear-gradient(135deg, #ffffff 0%, var(--last-gray-light) 100%);
+  opacity: 0.92;
+}
+
+.week-card.last::before {
+  content: "LAST WEEK";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--last-gray);
+  color: #fff;
+  padding: 6px 16px;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(107,114,128,.28);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* Next Week */
+.week-card.next {
+  border: 2px solid var(--next-red);
+  background: linear-gradient(135deg, #ffffff 0%, var(--next-red-light) 100%);
+}
+
+.week-card.next::before {
+  content: "NEXT WEEK";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--next-red), #dc2626);
+  color: #fff;
+  padding: 6px 16px;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(239,68,68,.28);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.week-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.week-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.date-range {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(248,250,252,.92), rgba(241,245,249,.92));
+  border-radius: 10px;
+  border: 1px solid rgba(226,232,240,.9);
+}
+
+/* =========================================
+   SHIFT ITEMS
+   ========================================= */
+.shift-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.shift-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,250,252,.92));
+  border: 1px solid rgba(226,232,240,.95);
+  border-radius: 12px;
+  transition: all .2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.shift-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(37,99,235,.45);
+  box-shadow: 0 8px 16px rgba(2,6,23,.08);
+  background: #fff;
+}
+
+.shift-role {
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(15,23,42,.04);
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(226,232,240,.9);
+}
+
+.shift-person {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.person-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 8px rgba(2,6,23,.06);
+}
+
+.person-ahmed {
+  background: #86efac;
+  color: #166534;
+  border: 2px solid #22c55e;
+}
+
+.person-yousef {
+  background: #fdba74;
+  color: #9a3412;
+  border: 2px solid #f97316;
+}
+
+.person-omar {
+  background: #93c5fd;
+  color: #1e3a8a;
+  border: 2px solid #3b82f6;
+}
+
+.off-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.off-note {
+  margin-top: 6px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: rgba(15,23,42,.75);
+}
+
+.off-note.holiday {
+  color: #b45309;
+}
+
+.week-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(37,99,235,.06);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  border: 1px solid rgba(37,99,235,.15);
+}
+
+body[dir="rtl"] .week-note {
+  text-align: center;
+}
+
+/* Schedule Section */
+.schedule-section {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.schedule-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.action-btn, .filter-btn {
+  font-family: "Work Sans", sans-serif;
+  font-weight: 700;
+  padding: 10px 16px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-size: 0.9rem;
+}
+
+.action-btn:hover, .filter-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.date-search {
+  flex: 1 1 220px;
+  min-width: 190px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+
+.date-search.invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12);
+}
+.date-search:focus {
+  border-color: rgba(37,99,235,.45);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+
+.scroll-hint {
+  display: none;
+  text-align: center;
+  padding: 8px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,235,.08), transparent);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: calc(12px + env(safe-area-inset-bottom));
+  border-radius: 6px;
+}
+
+#scheduleContainer {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.schedule-table thead {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+}
+
+.schedule-table th {
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.schedule-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.schedule-table td:last-child {
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-width: 200px;
+}
+
+.schedule-table tbody tr:hover {
+  background: rgba(37,99,235,.04);
+}
+
+.schedule-table tbody tr.current-week {
+  background: linear-gradient(90deg, rgba(16,185,129,.16), rgba(255,255,255,1)) !important;
+  box-shadow: inset 4px 0 0 rgba(16,185,129,1) !important;
+}
+
+/* Mobile Schedule Cards */
+.schedule-card {
+  display: none;
+}
+
+/* New Week Banner */
+.new-week-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-120%);
+  background: linear-gradient(135deg, var(--current-green), #059669);
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 24px rgba(16,185,129,.5);
+  z-index: 1000;
+  transition: transform .4s ease;
+}
+
+.new-week-banner.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes flash {
+  0%, 100% { background: rgba(37,99,235,.04); }
+  50% { background: #dbeafe; }
+}
+
+/* MOBILE STYLES */
+/*
+  Mobile/Touch:
+  - Some Android browsers still use a ~980px layout viewport in edge cases.
+  - The extra touch condition makes the bottom-nav kick in reliably.
+*/
+
+/* =========================================
+   FORCE MOBILE NAV ON TOUCH DEVICES
+   (Fixes cases where the browser starts in a wide layout viewport until user zooms)
+   ========================================= */
+.touch-device .app-shell {
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 12px;
+}
+
+.touch-device .side-nav {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  top: auto;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  border-radius: 999px;
+
+  background: rgba(17, 24, 39, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.35);
+}
+
+.touch-device .brand,
+.touch-device .nav-hint { display: none; }
+
+.touch-device .nav-item{
+  flex: 1;
+  margin: 0;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 12px 10px;
+  font-size: 0.9rem;
+}
+
+.touch-device .main-content{
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 1024px), (hover: none) and (pointer: coarse), (pointer: coarse) and (max-width: 1024px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 12px;
+  }
+
+  .side-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    border-radius: 18px 18px 0 0;
+    /* ensure it's always visible even if user has large display/font settings */
+    box-shadow: 0 -10px 28px rgba(2,6,23,.18);
+  }
+
+  .brand, .nav-hint { display: none; }
+
+  .nav-item {
+    margin: 0;
+    justify-content: center;
+    padding: 12px 8px;
+    font-size: 0.85rem;
+  }
+
+  .main-content { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+  /* Mobile Dashboard */
+  /* Creative Mobile Dashboard */
+  .dashboard {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 16px !important;
+    padding: 8px 16px !important;
+    margin: 0 -12px !important;
+  }
+
+  .dashboard::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dashboard {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Cards fit screen perfectly - 92% width */
+  .week-card {
+    flex: 0 0 92% !important;
+    scroll-snap-align: center !important;
+    scroll-snap-stop: always !important;
+    padding: 18px 14px 14px 14px !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 18px !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transform: scale(0.96) !important;
+  }
+
+  /* Active/centered card scales up smoothly */
+  .week-card:nth-child(2) {
+    transform: scale(1) !important;
+  }
+
+  .week-card.current {
+    flex: 0 0 92% !important;
+    transform: scale(1) !important;
+    border-width: 3px !important;
+    box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
+  }
+
+  .week-card.current::before,
+  .week-card.last::before,
+  .week-card.next::before {
+    top: -9px !important;
+    font-size: 0.68rem !important;
+    padding: 6px 14px !important;
+    max-width: calc(100% - 20px);
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .date-range {
+    font-size: 0.95rem !important;
+    padding: 12px 10px !important;
+    margin-bottom: 14px !important;
+    font-weight: 700 !important;
+  }
+
+  .shift-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .shift-item {
+    padding: 12px 10px !important;
+    border-radius: 10px !important;
+  }
+
+  .shift-role {
+    font-size: 0.72rem !important;
+    margin-bottom: 8px !important;
+    padding: 4px 9px !important;
+  }
+
+  .shift-person {
+    font-size: 1.05rem !important;
+  }
+
+  .person-badge {
+    padding: 7px 14px !important;
+    font-size: 0.92rem !important;
+  }
+
+  .off-badge {
+    padding: 9px 16px !important;
+    font-size: 0.88rem !important;
+  }
+
+  .off-note {
+    font-size: 0.78rem !important;
+    margin-top: 8px !important;
+  }
+
+  .week-note {
+    margin-top: 14px !important;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Empty card styling */
+  .week-card.empty-card {
+    background: linear-gradient(135deg, #fafafa, #f5f5f5) !important;
+    border: 2px dashed #d1d5db !important;
+  }
+
+  /* Mobile Schedule */
+  .scroll-hint {
+    display: block;
+  }
+
+  .schedule-table {
+    display: none !important;
+  }
+
+  #scheduleContainer {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .schedule-card {
+    display: block !important;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+  }
+
+  .schedule-card.current-week {
+    border: 2px solid var(--current-green);
+    background: linear-gradient(135deg, #ffffff 0%, rgba(209,250,229,0.3) 100%);
+    box-shadow: 0 4px 16px rgba(16,185,129,0.2);
+  }
+
+  .schedule-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: calc(12px + env(safe-area-inset-bottom));
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .schedule-card.current-week .schedule-card-header {
+    border-bottom-color: var(--current-green);
+  }
+
+  .schedule-week-num {
+      font-family: "Syne", system-ui, sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+  }
+
+  .schedule-card.current-week .schedule-week-num {
+    color: var(--current-green);
+  }
+
+  .schedule-week-num::before {
+    content: "Week ";
+  }
+
+  .schedule-dates {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .schedule-shifts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .schedule-shift-item {
+    text-align: center;
+  }
+
+  .schedule-shift-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .schedule-card .person-badge {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+  .schedule-note {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 10px 12px;
+    background: rgba(37,99,235,0.05);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  .schedule-note.holiday {
+    background: rgba(251,191,36,0.15);
+    color: #92400e;
+    font-weight: 700;
+  }
+}
+/* Extra small phones */
+@media (max-width: 380px) {
+  .week-card {
+    flex: 0 0 85% !important;
+    max-width: 260px !important;
+    padding: 12px !important;
+  }
+
+  .date-range {
+    font-size: 0.75rem !important;
+    padding: 6px !important;
+  }
+
+  .shift-role {
+    font-size: 0.6rem !important;
+  }
+
+  .person-badge {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+}
