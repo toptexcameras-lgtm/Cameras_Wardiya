@@ -579,14 +579,14 @@ body[dir="rtl"] .week-note {
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(12px + env(safe-area-inset-bottom));
+    bottom: 12px;
     top: auto;
     z-index: 50;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 16px;
 
     padding: 10px 12px;
     border-radius: 999px;
@@ -604,11 +604,10 @@ body[dir="rtl"] .week-note {
   .brand, .nav-hint { display: none; }
 
   .nav-item {
-    flex: 1;
     margin: 0;
     justify-content: center;
-    padding: 12px 10px;
-    font-size: 0.88rem;
+    padding: 12px 8px;
+    font-size: 0.85rem;
     border-radius: 999px;
 
     color: rgba(255,255,255,0.82);
@@ -617,7 +616,6 @@ body[dir="rtl"] .week-note {
 
     transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
   }
-
   .nav-item:hover {
     background: rgba(255,255,255,0.10);
     color: rgba(255,255,255,0.92);
@@ -634,7 +632,8 @@ body[dir="rtl"] .week-note {
     box-shadow: 0 10px 22px rgba(0,0,0,0.35);
   }
 
-  .main-content { padding-bottom: 120px; }
+
+  .main-content { padding-bottom: 90px; }
 
   /* Mobile Dashboard */
   /* Creative Mobile Dashboard */
@@ -858,6 +857,84 @@ body[dir="rtl"] .week-note {
   }
 }
 /* Extra small phones */
+
+/* ============================= */
+/* Touch devices fix (NO-ZOOM)   */
+/* Some mobile browsers open with a wide "layout viewport" (e.g. ~980px),
+   so max-width media queries won't fire until the user zooms.
+   This block forces the mobile layout on touch devices from first paint. */
+/* ============================= */
+@media (hover: none) and (pointer: coarse) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 12px;
+  }
+
+  .side-nav {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    top: auto;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .brand, .nav-hint { display: none; }
+
+  .nav-item {
+    margin: 0;
+    justify-content: center;
+    padding: 12px 8px;
+    font-size: 0.85rem;
+  }
+
+  .main-content { padding-bottom: 90px; }
+
+  /* Keep the mobile "swipe cards" dashboard */
+  .dashboard {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 16px !important;
+    padding: 8px 16px !important;
+    margin: 0 -12px !important;
+  }
+
+  .dashboard::-webkit-scrollbar { display: none; }
+  .dashboard { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .week-card {
+    flex: 0 0 92% !important;
+    scroll-snap-align: center !important;
+    scroll-snap-stop: always !important;
+    padding: 18px 14px 14px 14px !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 18px !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transform: scale(0.96) !important;
+  }
+
+  .week-card:nth-child(2) { transform: scale(1) !important; }
+  .week-card.current {
+    flex: 0 0 92% !important;
+    transform: scale(1) !important;
+    border-width: 3px !important;
+    box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
+  }
+}
+
+/* Prevent accidental horizontal scrolling on small screens */
+html, body { overflow-x: hidden; }
+
 @media (max-width: 380px) {
   .week-card {
     flex: 0 0 85% !important;
