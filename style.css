@@ -608,8 +608,8 @@ body[dir="rtl"] .week-note {
     scroll-snap-type: x mandatory !important;
     scroll-behavior: smooth !important;
     -webkit-overflow-scrolling: touch !important;
-    gap: 20px !important;
-    padding: 12px 20px !important;
+    gap: 16px !important;
+    padding: 8px 16px !important;
     margin: 0 -12px !important;
   }
 
@@ -617,189 +617,95 @@ body[dir="rtl"] .week-note {
     display: none;
   }
 
-  /* Creative Card Design */
-  .week-card {
-    flex: 0 0 88% !important;
-    scroll-snap-align: center !important;
-    padding: 0 !important;
-    max-width: 100% !important;
-    border-radius: 24px !important;
-    overflow: hidden !important;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
-    transform: scale(0.95) !important;
+  .dashboard {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  /* Center card scales up */
+  /* Cards fit screen perfectly - 92% width */
+  .week-card {
+    flex: 0 0 92% !important;
+    scroll-snap-align: center !important;
+    scroll-snap-stop: always !important;
+    padding: 18px 14px 14px 14px !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 18px !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transform: scale(0.96) !important;
+  }
+
+  /* Active/centered card scales up smoothly */
   .week-card:nth-child(2) {
     transform: scale(1) !important;
   }
 
-  /* Current week - special gradient design */
   .week-card.current {
-    flex: 0 0 90% !important;
-    transform: scale(1.02) !important;
-    border: none !important;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    box-shadow: 0 16px 40px rgba(16,185,129,.4), 0 0 0 3px rgba(16,185,129,0.2) !important;
-  }
-
-  .week-card.current .week-header,
-  .week-card.current .date-range,
-  .week-card.current .shift-role,
-  .week-card.current .week-note {
-    color: #fff !important;
-  }
-
-  .week-card.current .date-range {
-    background: rgba(255,255,255,0.2) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-  }
-
-  .week-card.current .shift-item {
-    background: rgba(255,255,255,0.15) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-  }
-
-  .week-card.current .shift-role {
-    background: rgba(255,255,255,0.25) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-    color: #fff !important;
-  }
-
-  .week-card.current .week-note {
-    background: rgba(255,255,255,0.2) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-  }
-
-  .week-card.current::before {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
-    box-shadow: 0 4px 20px rgba(251,191,36,0.6) !important;
-    animation: pulse-gold 2s infinite !important;
-  }
-
-  @keyframes pulse-gold {
-    0%, 100% { 
-      box-shadow: 0 4px 20px rgba(251,191,36,0.6);
-      transform: translateX(-50%) scale(1);
-    }
-    50% { 
-      box-shadow: 0 6px 30px rgba(251,191,36,0.9);
-      transform: translateX(-50%) scale(1.05);
-    }
-  }
-
-  /* Last week - subtle design */
-  .week-card.last {
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
-    border: 2px solid #d1d5db !important;
-    opacity: 0.9 !important;
-  }
-
-  .week-card.last::before {
-    background: linear-gradient(135deg, #6b7280, #4b5563) !important;
-  }
-
-  /* Next week - vibrant design */
-  .week-card.next {
-    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
-    border: 2px solid #fca5a5 !important;
-  }
-
-  .week-card.next::before {
-    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-  }
-
-  /* Card header with padding */
-  .week-card .week-header {
-    padding: 16px 16px 0 16px;
+    flex: 0 0 92% !important;
+    transform: scale(1) !important;
+    border-width: 3px !important;
+    box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
   }
 
   .week-card.current::before,
   .week-card.last::before,
   .week-card.next::before {
     top: -9px !important;
-    font-size: 0.7rem !important;
-    padding: 7px 16px !important;
-    border-radius: 20px !important;
+    font-size: 0.68rem !important;
+    padding: 6px 14px !important;
+    max-width: calc(100% - 20px);
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
   }
 
-  /* Date range styling */
   .date-range {
-    font-size: 1rem !important;
-    padding: 14px 12px !important;
-    margin: 0 16px 16px 16px !important;
-    font-weight: 800 !important;
-    border-radius: 16px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+    font-size: 0.95rem !important;
+    padding: 12px 10px !important;
+    margin-bottom: 14px !important;
+    font-weight: 700 !important;
   }
 
-  /* Shift grid - vertical with creative layout */
   .shift-grid {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
-    padding: 0 16px !important;
   }
 
   .shift-item {
-    padding: 14px 12px !important;
-    border-radius: 14px !important;
-    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.95)) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-  }
-
-  .shift-item:hover {
-    transform: translateX(4px) !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    padding: 12px 10px !important;
+    border-radius: 10px !important;
   }
 
   .shift-role {
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
     margin-bottom: 8px !important;
-    padding: 5px 10px !important;
-    border-radius: 8px !important;
+    padding: 4px 9px !important;
   }
 
   .shift-person {
-    font-size: 1.1rem !important;
+    font-size: 1.05rem !important;
   }
 
   .person-badge {
-    padding: 8px 16px !important;
-    font-size: 0.95rem !important;
-    border-radius: 12px !important;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15) !important;
-  }
-
-  /* OFF section with better spacing */
-  .week-card > div[style*="margin-top"] {
-    padding: 16px !important;
+    padding: 7px 14px !important;
+    font-size: 0.92rem !important;
   }
 
   .off-badge {
-    padding: 10px 18px !important;
-    font-size: 0.9rem !important;
-    border-radius: 14px !important;
-    background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
-    color: #92400e !important;
-    border: 2px solid #fbbf24 !important;
-    box-shadow: 0 4px 12px rgba(251,191,36,0.3) !important;
+    padding: 9px 16px !important;
+    font-size: 0.88rem !important;
   }
 
   .off-note {
-    font-size: 0.8rem !important;
-    margin-top: 10px !important;
+    font-size: 0.78rem !important;
+    margin-top: 8px !important;
   }
 
-  /* Week note - more prominent */
   .week-note {
-    margin: 16px !important;
-    padding: 14px 16px !important;
-    font-size: 0.85rem !important;
-    line-height: 1.6 !important;
-    border-radius: 16px !important;
-    font-weight: 700 !important;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08) !important;
+    margin-top: 14px !important;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
   }
 
   /* Empty card styling */
@@ -913,5 +819,27 @@ body[dir="rtl"] .week-note {
     background: rgba(251,191,36,0.15);
     color: #92400e;
     font-weight: 700;
+  }
+}
+/* Extra small phones */
+@media (max-width: 380px) {
+  .week-card {
+    flex: 0 0 85% !important;
+    max-width: 260px !important;
+    padding: 12px !important;
+  }
+
+  .date-range {
+    font-size: 0.75rem !important;
+    padding: 6px !important;
+  }
+
+  .shift-role {
+    font-size: 0.6rem !important;
+  }
+
+  .person-badge {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
   }
 }
