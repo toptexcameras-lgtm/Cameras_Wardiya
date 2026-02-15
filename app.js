@@ -329,17 +329,7 @@ function switchTab(tabName){
   document.getElementById(tabName).classList.add("active");
   document.querySelector(`.nav-item[data-tab="${tabName}"]`).classList.add("active");
   
-  if(tabName === "schedule" && isMobileLike()){
-    setTimeout(() => {
-      const currentWeekIndex = getCurrentWeekIndex(fullSchedule);
-      if(currentWeekIndex !== -1){
-        const card = document.getElementById(`week-${currentWeekIndex}`);
-        if(card){
-          card.scrollIntoView({behavior: 'smooth', block: 'center'});
-        }
-      }
-    }, 300);
-  }
+  // NOTE: No auto-scroll on open schedule. Highlight is enough.
 }
 
 // Filters
