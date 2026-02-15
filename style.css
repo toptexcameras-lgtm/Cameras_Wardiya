@@ -773,11 +773,6 @@ body[dir="rtl"] .week-note {
     border: 1px solid var(--border);
   }
 
-  #scheduleContainer .schedule-card:not(.current-week):nth-child(even){
-    background: #f8fafc;
-  }
-
-
   .schedule-card.current-week {
     border: 2px solid var(--current-green);
     background: linear-gradient(135deg, #ffffff 0%, rgba(209,250,229,0.3) 100%);
