@@ -169,12 +169,11 @@ body::after {
 }
 
 .week-card {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
   transition: transform .25s ease, box-shadow .25s ease;
   position: relative;
 }
@@ -190,6 +189,7 @@ body::after {
   background: var(--light);
 }
 
+/* Current Week */
 .week-card.current {
   border: 3px solid var(--current-green);
   box-shadow: 0 14px 30px rgba(16,185,129,.30);
@@ -221,6 +221,19 @@ body::after {
   50% { box-shadow: 0 6px 26px rgba(16,185,129,.75); }
 }
 
+.week-card.current .week-label::before {
+  content: "★ ";
+  color: var(--current-green);
+  animation: rotate-star 3s linear infinite;
+  display: inline-block;
+}
+
+@keyframes rotate-star {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+
+/* Last Week */
 .week-card.last {
   border: 2px solid var(--last-gray);
   background: linear-gradient(135deg, #ffffff 0%, var(--last-gray-light) 100%);
@@ -245,6 +258,7 @@ body::after {
   white-space: nowrap;
 }
 
+/* Next Week */
 .week-card.next {
   border: 2px solid var(--next-red);
   background: linear-gradient(135deg, #ffffff 0%, var(--next-red-light) 100%);
@@ -268,7 +282,10 @@ body::after {
   white-space: nowrap;
 }
 
-.week-header { text-align: center; margin-bottom: 8px; }
+.week-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
 
 .week-label {
   font-size: 0.75rem;
@@ -291,6 +308,9 @@ body::after {
   border: 1px solid rgba(226,232,240,.9);
 }
 
+/* =========================================
+   SHIFT ITEMS
+   ========================================= */
 .shift-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -306,6 +326,8 @@ body::after {
   border: 1px solid rgba(226,232,240,.95);
   border-radius: 12px;
   transition: all .2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .shift-item:hover {
@@ -328,7 +350,10 @@ body::after {
   border: 1px solid rgba(226,232,240,.9);
 }
 
-.shift-person { font-weight: 800; font-size: 1rem; }
+.shift-person {
+  font-weight: 800;
+  font-size: 1rem;
+}
 
 .person-badge {
   display: inline-block;
@@ -339,9 +364,23 @@ body::after {
   box-shadow: 0 4px 8px rgba(2,6,23,.06);
 }
 
-.person-ahmed { background: #86efac; color: #166534; border: 2px solid #22c55e; }
-.person-yousef { background: #fdba74; color: #9a3412; border: 2px solid #f97316; }
-.person-omar { background: #93c5fd; color: #1e3a8a; border: 2px solid #3b82f6; }
+.person-ahmed {
+  background: #86efac;
+  color: #166534;
+  border: 2px solid #22c55e;
+}
+
+.person-yousef {
+  background: #fdba74;
+  color: #9a3412;
+  border: 2px solid #f97316;
+}
+
+.person-omar {
+  background: #93c5fd;
+  color: #1e3a8a;
+  border: 2px solid #3b82f6;
+}
 
 .off-badge {
   display: inline-flex;
@@ -351,7 +390,7 @@ body::after {
   padding: 8px 16px;
   border-radius: 999px;
   background: #ffffff;
-  color: #666;
+  color: #fff;
   font-weight: 800;
   font-size: 0.85rem;
 }
@@ -368,8 +407,8 @@ body::after {
 }
 
 .week-note {
-  margin-top: 14px;
-  padding: 10px 12px;
+  margin-top: 10px;
+  padding: 8px 12px;
   background: rgba(37,99,235,.06);
   border-radius: 8px;
   font-size: 0.8rem;
@@ -377,7 +416,10 @@ body::after {
   color: var(--text-secondary);
   text-align: center;
   border: 1px solid rgba(37,99,235,.15);
-  line-height: 1.5;
+}
+
+body[dir="rtl"] .week-note {
+  text-align: center;
 }
 
 /* Schedule Section */
@@ -871,128 +913,5 @@ body::after {
     background: rgba(251,191,36,0.15);
     color: #92400e;
     font-weight: 700;
-  }
-}
-
-
-/* =========================================
-   MERGE V1 CARD LOOK + V2 TRANSPOSE (MOBILE ONLY) - DEBUG PATCH
-   NOTE: Appended at end to avoid touching existing rules.
-   ========================================= */
-
-@media (max-width: 820px) {
-
-  /* V1 LOOK (Neumorphism Style) */
-  .week-card{
-    border-radius: 24px !important;
-    background: linear-gradient(145deg, #ffffff, #f1f5f9) !important;
-    box-shadow:
-      8px 8px 20px rgba(0,0,0,0.06),
-      -8px -8px 20px rgba(255,255,255,0.85) !important;
-    border: none !important;
-    transition: all .35s ease !important;
-  }
-
-  .week-card:hover{
-    transform: translateY(-2px) !important;
-    box-shadow:
-      12px 12px 28px rgba(0,0,0,0.08),
-      -12px -12px 28px rgba(255,255,255,0.92) !important;
-  }
-
-  .shift-item{
-    border-radius: 16px !important;
-    padding: 14px 12px !important;
-    background: #ffffff !important;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.05) !important;
-    border: none !important;
-  }
-
-  .shift-item:hover{
-    transform: translateY(-1px) !important;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
-  }
-
-  /* Preserve week states on mobile (debug: keep badges readable) */
-  .week-card.current{
-    background: linear-gradient(145deg, #ecfdf5, #d1fae5) !important;
-    box-shadow:
-      0 0 0 3px rgba(16,185,129,0.18),
-      12px 12px 30px rgba(16,185,129,0.22) !important;
-  }
-
-  .week-card.last{
-    background: linear-gradient(145deg, #ffffff, #f3f4f6) !important;
-  }
-
-  .week-card.next{
-    background: linear-gradient(145deg, #ffffff, #fee2e2) !important;
-  }
-
-  /* V2 TRANSPOSE LAYOUT (Mobile) */
-  .week-card{
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: stretch !important;
-    gap: 14px !important;
-    padding: 18px 14px 14px 14px !important; /* keep your mobile spacing */
-  }
-
-  /* Keep swipeable dashboard behavior intact */
-  .dashboard .week-card{
-    flex: 0 0 92% !important; /* same as your mobile card width */
-    scroll-snap-align: center !important;
-    scroll-snap-stop: always !important;
-  }
-
-  .week-header{
-    flex: 0 0 160px !important;
-    text-align: left !important;
-    margin-bottom: 0 !important;
-    padding: 0 !important; /* debug: prevent double padding */
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    gap: 8px !important;
-  }
-
-  .date-range{
-    margin: 0 !important;
-  }
-
-  /* Shifts area */
-  .shift-grid{
-    flex: 1 !important;
-    grid-template-columns: 1fr !important; /* stack shifts to avoid squeezing */
-    gap: 10px !important;
-  }
-
-  /* Note stays full-width under shifts (if exists) */
-  .week-note{
-    width: 100% !important;
-    margin-top: 12px !important;
-  }
-
-  /* Debug: ensure pseudo badges don't overflow on small screens */
-  .week-card.current::before,
-  .week-card.last::before,
-  .week-card.next::before{
-    max-width: calc(100% - 24px) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-}
-
-/* Extra small phones: switch to column to prevent crowding */
-@media (max-width: 380px) {
-  .week-card{
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  .week-header{
-    flex: unset !important;
-    text-align: center !important;
   }
 }
