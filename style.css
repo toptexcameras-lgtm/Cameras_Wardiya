@@ -590,7 +590,7 @@ body[dir="rtl"] .week-note {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    padding: 12px;
+    padding: 14px;
     border-radius: 16px;
   }
 
@@ -599,11 +599,11 @@ body[dir="rtl"] .week-note {
   .nav-item {
     margin: 0;
     justify-content: center;
-    padding: 12px 8px;
-    font-size: 0.85rem;
+    padding: 14px 10px;
+    font-size: 0.9rem;
   }
 
-  .main-content { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+  .main-content { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
 
   /* Mobile Dashboard */
   /* Creative Mobile Dashboard */
