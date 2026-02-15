@@ -1,83 +1,16 @@
 // =============================
 // Core Data & Configuration
 // =============================
-const START_DATE = new Date(2026, 0, 3); // Saturday, Jan 03, 2026
+const START_DATE = new Date(2026, 0, 3);
 const TOTAL_WEEKS = 52;
 
 // =============================
-// Language Support
-// =============================
-let currentLang = localStorage.getItem('wardiya_lang') || 'en';
-
-const translations = {
-  en: {
-    'Last Week': 'Last Week',
-    'Current Week': 'Current Week',
-    'Next Week': 'Next Week',
-    'First Shift': 'First Shift',
-    'Second Shift': 'Second Shift',
-    'Third Shift': 'Third Shift',
-    'OFF': 'OFF',
-    'Holiday!': 'Holiday!',
-    'Regular OFF': 'Regular OFF',
-    'Expected official holiday': 'Expected official holiday',
-    'Not Available': 'Not Available',
-    'Week': 'Week'
-  },
-  ar: {
-    'Last Week': 'الأسبوع الماضي',
-    'Current Week': 'الأسبوع الحالي',
-    'Next Week': 'الأسبوع القادم',
-    'First Shift': 'الوردية الأولى',
-    'Second Shift': 'الوردية الثانية',
-    'Third Shift': 'الوردية الثالثة',
-    'OFF': 'إجازة',
-    'Holiday!': 'عطلة رسمية!',
-    'Regular OFF': 'إجازة عادية',
-    'Expected official holiday': 'متوقع إجازة رسمية',
-    'Not Available': 'غير متاح',
-    'Week': 'أسبوع'
-  }
-};
-
-function t(key) {
-  return translations[currentLang][key] || key;
-}
-
-function toggleLanguage() {
-  currentLang = currentLang === 'en' ? 'ar' : 'en';
-  localStorage.setItem('wardiya_lang', currentLang);
-  
-  // Update HTML direction
-  document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-  
-  // Update all elements with translations
-  document.querySelectorAll('[data-en]').forEach(el => {
-    el.textContent = el.getAttribute(`data-${currentLang}`);
-  });
-  
-  // Re-render content
-  let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
-  renderDashboard(fullSchedule, currentWeekIndex);
-  renderScheduleTable(fullSchedule, currentWeekIndex);
-}
-
-// =============================
-// Official Holidays (Expected OFF)
+// Official Holidays
 // =============================
 const HOLIDAYS_DEFAULT = [
-  "08/01/2026",
-  "29/01/2026",
-  "19/03/2026",
-  "26/03/2026",
-  "16/04/2026",
-  "30/04/2026",
-  "28/05/2026",
-  "18/06/2026",
-  "02/07/2026",
-  "23/07/2026",
-  "27/08/2026",
-  "08/10/2026"
+  "08/01/2026", "29/01/2026", "19/03/2026", "26/03/2026",
+  "16/04/2026", "30/04/2026", "28/05/2026", "18/06/2026",
+  "02/07/2026", "23/07/2026", "27/08/2026", "08/10/2026"
 ];
 
 function getHolidaySet() {
@@ -98,7 +31,7 @@ function formatDate(date) {
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  return day + "/" + month + "/" + year;
 }
 
 function addDays(date, days) {
@@ -110,8 +43,6 @@ function addDays(date, days) {
 function parseDateInput(str) {
   if (!str) return null;
   const s = str.trim();
-  
-  // yyyy-mm-dd from <input type="date">
   const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (iso) {
     const yyyy = Number(iso[1]), mm = Number(iso[2]), dd = Number(iso[3]);
@@ -120,7 +51,6 @@ function parseDateInput(str) {
     d.setHours(0, 0, 0, 0);
     return d;
   }
-  
   return null;
 }
 
@@ -135,42 +65,39 @@ function weekContainsDate(weekObj, dateObj) {
 // Week Rotation Logic
 // =============================
 function getWeekRotation(weekIndex) {
-  const rotationIndex = weekIndex % 3;
   const rotations = [
     { first: "Ahmed", second: "Yousef", third: "Omar" },
     { first: "Yousef", second: "Omar", third: "Ahmed" },
     { first: "Omar", second: "Ahmed", third: "Yousef" }
   ];
-  return rotations[rotationIndex];
+  return rotations[weekIndex % 3];
 }
 
 function generateSchedule() {
   const schedule = [];
   for (let i = 0; i < TOTAL_WEEKS; i++) {
     const weekStart = addDays(START_DATE, i * 7);
-    const weekEnd = addDays(weekStart, 5); // Thu (week ends Thursday)
+    const weekEnd = addDays(weekStart, 5);
     const rotation = getWeekRotation(i);
     schedule.push({
       weekNumber: i + 1,
-      weekStart,
-      weekEnd,
+      weekStart: weekStart,
+      weekEnd: weekEnd,
       weekStartFormatted: formatDate(weekStart),
       weekEndFormatted: formatDate(weekEnd),
       first: rotation.first,
       second: rotation.second,
-      third: rotation.third,
+      third: rotation.third
     });
   }
   return schedule;
 }
 
 // =============================
-// Week rollover rule
-// Friday is OFF day, but we switch to the next week at Friday 18:00 (6 PM)
+// Current Week Detection
 // =============================
 function getEffectiveNow() {
   const now = new Date();
-  // JS getDay(): Sun=0..Sat=6, Friday=5
   if (now.getDay() === 5 && now.getHours() >= 18) {
     const d = new Date(now);
     d.setDate(d.getDate() + 1);
@@ -193,7 +120,7 @@ function getCurrentWeekIndex(schedule) {
 }
 
 function getPersonClass(person) {
-  return `person-${person.toLowerCase()}`;
+  return "person-" + person.toLowerCase();
 }
 
 // =============================
@@ -225,18 +152,18 @@ function renderDashboard(schedule, currentWeekIndex) {
   }
 
   const cards = [
-    { index: lastWeekIndex, label: t("Last Week"), pos: "last" },
-    { index: currentWeekIndexDisplay, label: t("Current Week"), pos: "current" },
-    { index: nextWeekIndex, label: t("Next Week"), pos: "next" }
+    { index: lastWeekIndex, label: "Last Week", pos: "last" },
+    { index: currentWeekIndexDisplay, label: "Current Week", pos: "current" },
+    { index: nextWeekIndex, label: "Next Week", pos: "next" }
   ];
 
   const holidays = getHolidaySet();
 
-  cards.forEach((c) => {
+  cards.forEach(function(c) {
     if (c.index < 0 || c.index >= schedule.length) {
       const empty = document.createElement("div");
       empty.className = "week-card empty-card";
-      empty.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary)">${t('Not Available')}</div>`;
+      empty.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-secondary)">Not Available</div>';
       container.appendChild(empty);
       return;
     }
@@ -250,51 +177,42 @@ function renderDashboard(schedule, currentWeekIndex) {
     else className += " " + c.pos;
 
     card.className = className;
-    card.setAttribute('data-card-index', c.index);
 
     const offDate = new Date(week.weekEnd);
-    offDate.setDate(offDate.getDate() + 1); // Friday
+    offDate.setDate(offDate.getDate() + 1);
     const offDateStr = formatDate(offDate);
     const isHoliday = holidays.has(offDateStr);
-    const offNote = isHoliday ? `<div class="off-note holiday">🎉 ${t('Holiday!')}</div>` : '';
-    
-    // Add week note if it's a holiday week
+    const offNote = isHoliday ? '<div class="off-note holiday">🎉 Holiday!</div>' : '';
     const weekNote = isHoliday ? 
-      `<div class="week-note">ℹ️ ${t('Expected official holiday')}</div>` : '';
+      '<div class="week-note">ℹ️ متوقع إجازة رسمية مرحلة للخميس</div>' : 
+      '<div class="week-note">📋 Regular work week</div>';
 
-    card.innerHTML = `
-      <div class="week-header">
-        <div class="week-label">${c.label}</div>
-      </div>
-      <div class="date-range">${week.weekStartFormatted} - ${week.weekEndFormatted}</div>
-
-      <div class="shift-grid">
-        <div class="shift-item">
-          <span class="shift-role">${t('First Shift')}</span>
-          <span class="shift-person person-badge ${getPersonClass(week.first)}">${week.first}</span>
-        </div>
-        <div class="shift-item">
-          <span class="shift-role">${t('Second Shift')}</span>
-          <span class="shift-person person-badge ${getPersonClass(week.second)}">${week.second}</span>
-        </div>
-        <div class="shift-item">
-          <span class="shift-role">${t('Third Shift')}</span>
-          <span class="shift-person person-badge ${getPersonClass(week.third)}">${week.third}</span>
-        </div>
-      </div>
-
-      <div style="margin-top:12px;text-align:center;">
-        <span class="off-badge">🌴 ${t('OFF')}</span>
-        ${offNote}
-      </div>
-      ${weekNote}
-    `;
+    card.innerHTML = 
+      '<div class="week-header"><div class="week-label">' + c.label + '</div></div>' +
+      '<div class="date-range">' + week.weekStartFormatted + ' - ' + week.weekEndFormatted + '</div>' +
+      '<div class="shift-grid">' +
+        '<div class="shift-item">' +
+          '<span class="shift-role">First Shift</span>' +
+          '<span class="shift-person person-badge ' + getPersonClass(week.first) + '">' + week.first + '</span>' +
+        '</div>' +
+        '<div class="shift-item">' +
+          '<span class="shift-role">Second Shift</span>' +
+          '<span class="shift-person person-badge ' + getPersonClass(week.second) + '">' + week.second + '</span>' +
+        '</div>' +
+        '<div class="shift-item">' +
+          '<span class="shift-role">Third Shift</span>' +
+          '<span class="shift-person person-badge ' + getPersonClass(week.third) + '">' + week.third + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:12px;text-align:center;">' +
+        '<span class="off-badge">🌴 OFF</span>' + offNote +
+      '</div>' + weekNote;
+    
     container.appendChild(card);
   });
 
-  // Auto-scroll to current week card on mobile
   if (window.innerWidth <= 820) {
-    setTimeout(() => {
+    setTimeout(function() {
       const currentCard = container.querySelector('.week-card.current');
       if (currentCard) {
         currentCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
@@ -304,66 +222,113 @@ function renderDashboard(schedule, currentWeekIndex) {
 }
 
 // =============================
-// Render Schedule Table
+// Render Schedule (Desktop & Mobile)
 // =============================
 function renderScheduleTable(schedule, currentWeekIndex) {
-  const tbody = document.getElementById("scheduleBody");
-  if (!tbody) return;
-  tbody.innerHTML = "";
-
+  const container = document.getElementById("scheduleContainer");
+  if (!container) return;
+  
   const holidays = getHolidaySet();
-
-  schedule.forEach((week, idx) => {
-    const row = document.createElement("tr");
-    row.id = `week-${idx}`;
-
-    if (idx === currentWeekIndex) {
-      row.classList.add("current-week");
-    }
-
-    const offDate = new Date(week.weekEnd);
-    offDate.setDate(offDate.getDate() + 1); // Friday
-    const offDateStr = formatDate(offDate);
-    const isHoliday = holidays.has(offDateStr);
-    const noteText = isHoliday ? 
-      `🎉 ${t('Expected official holiday')}` : 
-      t('Regular OFF');
-
-    row.innerHTML = `
-      <td><strong>${t('Week')} ${week.weekNumber}</strong></td>
-      <td>${week.weekStartFormatted}</td>
-      <td>${week.weekEndFormatted}</td>
-      <td><span class="person-badge ${getPersonClass(week.first)}">${week.first}</span></td>
-      <td><span class="person-badge ${getPersonClass(week.second)}">${week.second}</span></td>
-      <td><span class="person-badge ${getPersonClass(week.third)}">${week.third}</span></td>
-      <td>${noteText}</td>
-    `;
-    tbody.appendChild(row);
-  });
+  
+  // Check if mobile
+  const isMobile = window.innerWidth <= 820;
+  
+  if (isMobile) {
+    // Render card-based layout for mobile
+    container.innerHTML = "";
+    
+    schedule.forEach(function(week, idx) {
+      const card = document.createElement("div");
+      card.className = "schedule-card";
+      card.id = "week-" + idx;
+      
+      if (idx === currentWeekIndex) {
+        card.classList.add("current-week");
+      }
+      
+      const offDate = new Date(week.weekEnd);
+      offDate.setDate(offDate.getDate() + 1);
+      const offDateStr = formatDate(offDate);
+      const isHoliday = holidays.has(offDateStr);
+      
+      const noteHTML = isHoliday ? 
+        '<div class="schedule-note holiday">🎉 متوقع إجازة رسمية مرحلة للخميس</div>' :
+        '<div class="schedule-note">Regular OFF Day</div>';
+      
+      card.innerHTML = 
+        '<div class="schedule-card-header">' +
+          '<span class="schedule-week-num">' + week.weekNumber + '</span>' +
+          '<span class="schedule-dates">' + week.weekStartFormatted + ' - ' + week.weekEndFormatted + '</span>' +
+        '</div>' +
+        '<div class="schedule-shifts">' +
+          '<div class="schedule-shift-item">' +
+            '<span class="schedule-shift-label">1st</span>' +
+            '<span class="schedule-shift-person person-badge ' + getPersonClass(week.first) + '">' + week.first + '</span>' +
+          '</div>' +
+          '<div class="schedule-shift-item">' +
+            '<span class="schedule-shift-label">2nd</span>' +
+            '<span class="schedule-shift-person person-badge ' + getPersonClass(week.second) + '">' + week.second + '</span>' +
+          '</div>' +
+          '<div class="schedule-shift-item">' +
+            '<span class="schedule-shift-label">3rd</span>' +
+            '<span class="schedule-shift-person person-badge ' + getPersonClass(week.third) + '">' + week.third + '</span>' +
+          '</div>' +
+        '</div>' +
+        noteHTML;
+      
+      container.appendChild(card);
+    });
+  } else {
+    // Render table for desktop
+    let tableHTML = '<table class="schedule-table"><thead><tr>' +
+      '<th>Week #</th><th>Start (Sat)</th><th>End (Thu)</th>' +
+      '<th>First</th><th>Second</th><th>Third</th><th>Notes</th>' +
+      '</tr></thead><tbody>';
+    
+    schedule.forEach(function(week, idx) {
+      const offDate = new Date(week.weekEnd);
+      offDate.setDate(offDate.getDate() + 1);
+      const offDateStr = formatDate(offDate);
+      const isHoliday = holidays.has(offDateStr);
+      const noteText = isHoliday ? '🎉 متوقع إجازة رسمية مرحلة للخميس' : 'Regular OFF';
+      
+      const rowClass = (idx === currentWeekIndex) ? ' class="current-week"' : '';
+      
+      tableHTML += '<tr id="week-' + idx + '"' + rowClass + '>' +
+        '<td><strong>Week ' + week.weekNumber + '</strong></td>' +
+        '<td>' + week.weekStartFormatted + '</td>' +
+        '<td>' + week.weekEndFormatted + '</td>' +
+        '<td><span class="person-badge ' + getPersonClass(week.first) + '">' + week.first + '</span></td>' +
+        '<td><span class="person-badge ' + getPersonClass(week.second) + '">' + week.second + '</span></td>' +
+        '<td><span class="person-badge ' + getPersonClass(week.third) + '">' + week.third + '</span></td>' +
+        '<td>' + noteText + '</td>' +
+        '</tr>';
+    });
+    
+    tableHTML += '</tbody></table>';
+    container.innerHTML = tableHTML;
+  }
 }
 
 // =============================
 // Tab Navigation
 // =============================
 function switchTab(tabName) {
-  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(function(t) { t.classList.remove("active"); });
+  document.querySelectorAll(".nav-item").forEach(function(b) { b.classList.remove("active"); });
   
   const tabContent = document.getElementById(tabName);
-  const navItem = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+  const navItem = document.querySelector('.nav-item[data-tab="' + tabName + '"]');
   
   if (tabContent) tabContent.classList.add("active");
   if (navItem) navItem.classList.add("active");
   
-  // Auto-scroll to current week when opening schedule on mobile
   if (tabName === "schedule" && window.innerWidth <= 820) {
-    setTimeout(() => {
+    setTimeout(function() {
       let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
       if (currentWeekIndex !== -1) {
-        const row = document.getElementById(`week-${currentWeekIndex}`);
-        if (row) {
-          row.scrollIntoView({ behavior: "smooth", block: "center", inline: "start" });
-        }
+        const card = document.getElementById("week-" + currentWeekIndex);
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }, 300);
   }
@@ -377,20 +342,19 @@ let dateFilter = null;
 let fullSchedule = [];
 
 function applyFilters() {
-  let filtered = [...fullSchedule];
+  let filtered = fullSchedule.slice();
   
   if (currentFilter) {
-    filtered = filtered.filter(week =>
-      week.first === currentFilter || week.second === currentFilter || week.third === currentFilter
-    );
+    filtered = filtered.filter(function(week) {
+      return week.first === currentFilter || week.second === currentFilter || week.third === currentFilter;
+    });
   }
   
   if (dateFilter) {
-    filtered = filtered.filter(week => weekContainsDate(week, dateFilter));
+    filtered = filtered.filter(function(week) { return weekContainsDate(week, dateFilter); });
   }
 
-  let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
-  renderScheduleTable(filtered, currentWeekIndex);
+  renderScheduleTable(filtered, getCurrentWeekIndex(fullSchedule));
 }
 
 function clearFilters() {
@@ -401,10 +365,8 @@ function clearFilters() {
     dateInput.value = '';
     dateInput.classList.remove('invalid');
   }
-
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-  let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
-  renderScheduleTable(fullSchedule, currentWeekIndex);
+  document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+  renderScheduleTable(fullSchedule, getCurrentWeekIndex(fullSchedule));
 }
 
 // =============================
@@ -413,53 +375,44 @@ function clearFilters() {
 function goToCurrentWeek() {
   let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
   if (currentWeekIndex === -1) return;
-  const row = document.getElementById(`week-${currentWeekIndex}`);
-  if (!row) return;
+  const element = document.getElementById("week-" + currentWeekIndex);
+  if (!element) return;
 
-  // For mobile, ensure the row is fully visible
-  if (window.innerWidth <= 820) {
-    row.scrollIntoView({ behavior: "smooth", block: "center", inline: "start" });
-  } else {
-    row.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
+  element.scrollIntoView({ behavior: "smooth", block: "center" });
   
-  row.style.animation = "none";
-  setTimeout(() => { row.style.animation = "flash 1s ease-out"; }, 10);
+  element.style.animation = "none";
+  setTimeout(function() { element.style.animation = "flash 1s ease-out"; }, 10);
 }
 
 // =============================
 // New Week Banner
 // =============================
-const WEEK_TRACK_KEY = "wardiya_last_seen_week_index_v1";
-
 function showNewWeekBanner(weekNumber) {
   const banner = document.getElementById("newWeekBanner");
   if (!banner) return;
   
-  banner.textContent = `🎉 New Week Started! Week #${weekNumber}`;
+  banner.textContent = "🎉 New Week Started! Week #" + weekNumber;
   banner.classList.add("show");
   
-  setTimeout(() => { banner.style.opacity = "0"; }, 3800);
-  setTimeout(() => {
-    banner.classList.remove("show");
-    banner.style.opacity = "";
-  }, 4300);
+  setTimeout(function() { banner.style.opacity = "0"; }, 3800);
+  setTimeout(function() { banner.classList.remove("show"); banner.style.opacity = ""; }, 4300);
 }
 
-function checkNewWeek(fullSchedule) {
-  const currentIndex = getCurrentWeekIndex(fullSchedule);
+function checkNewWeek(schedule) {
+  const currentIndex = getCurrentWeekIndex(schedule);
   if (currentIndex === -1) return;
 
-  const lastSeen = localStorage.getItem(WEEK_TRACK_KEY);
-  if (lastSeen === null) {
-    localStorage.setItem(WEEK_TRACK_KEY, String(currentIndex));
-    return;
-  }
-
-  if (Number(lastSeen) !== currentIndex) {
-    localStorage.setItem(WEEK_TRACK_KEY, String(currentIndex));
-    showNewWeekBanner(fullSchedule[currentIndex].weekNumber);
-  }
+  try {
+    const lastSeen = localStorage.getItem("wardiya_last_seen_week_index_v1");
+    if (lastSeen === null) {
+      localStorage.setItem("wardiya_last_seen_week_index_v1", String(currentIndex));
+      return;
+    }
+    if (Number(lastSeen) !== currentIndex) {
+      localStorage.setItem("wardiya_last_seen_week_index_v1", String(currentIndex));
+      showNewWeekBanner(schedule[currentIndex].weekNumber);
+    }
+  } catch (e) {}
 }
 
 // =============================
@@ -487,14 +440,13 @@ function applyDateSearch() {
   dateFilter = parsed;
   applyFilters();
 
-  // Scroll to matching week
-  const match = fullSchedule.find(w => weekContainsDate(w, parsed));
+  const match = fullSchedule.find(function(w) { return weekContainsDate(w, parsed); });
   if (match) {
-    const row = document.getElementById(`week-${match.weekNumber - 1}`);
-    if (row) {
-      row.scrollIntoView({ behavior: "smooth", block: "center" });
-      row.style.animation = "none";
-      setTimeout(() => { row.style.animation = "flash 1s ease-out"; }, 10);
+    const element = document.getElementById("week-" + (match.weekNumber - 1));
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      element.style.animation = "none";
+      setTimeout(function() { element.style.animation = "flash 1s ease-out"; }, 10);
     }
   }
 }
@@ -503,12 +455,6 @@ function applyDateSearch() {
 // Initialization
 // =============================
 function init() {
-  // Set initial language
-  document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-  document.querySelectorAll('[data-en]').forEach(el => {
-    el.textContent = el.getAttribute(`data-${currentLang}`);
-  });
-
   fullSchedule = generateSchedule();
   let currentWeekIndex = getCurrentWeekIndex(fullSchedule);
 
@@ -516,43 +462,28 @@ function init() {
   renderScheduleTable(fullSchedule, currentWeekIndex);
   checkNewWeek(fullSchedule);
 
-  // Language toggle
-  const langToggle = document.getElementById("langToggle");
-  if (langToggle) {
-    langToggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleLanguage();
-    });
-  }
-
-  // Tab navigation
-  document.querySelectorAll(".nav-item").forEach(btn => {
-    if (btn.id !== "langToggle") {
-      btn.addEventListener("click", () => switchTab(btn.dataset.tab));
-    }
+  document.querySelectorAll(".nav-item").forEach(function(btn) {
+    btn.addEventListener("click", function() { switchTab(btn.dataset.tab); });
   });
 
-  // "Go to Current Week" button
   const goCurrentBtn = document.getElementById("goCurrentBtn");
   if (goCurrentBtn) {
-    goCurrentBtn.addEventListener("click", () => {
+    goCurrentBtn.addEventListener("click", function() {
       switchTab("schedule");
       setTimeout(goToCurrentWeek, 60);
     });
   }
 
-  // Date search
   const dateInput = document.getElementById("dateSearch");
   const clearDateBtn = document.getElementById("clearDateBtn");
 
   if (dateInput) {
     let debounceTimer;
-    dateInput.addEventListener("input", () => {
+    dateInput.addEventListener("input", function() {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(applyDateSearch, 200);
     });
-    
-    dateInput.addEventListener("keydown", (e) => {
+    dateInput.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
         applyDateSearch();
@@ -561,7 +492,7 @@ function init() {
   }
 
   if (clearDateBtn) {
-    clearDateBtn.addEventListener("click", () => {
+    clearDateBtn.addEventListener("click", function() {
       if (dateInput) {
         dateInput.value = "";
         dateInput.classList.remove("invalid");
@@ -571,19 +502,26 @@ function init() {
     });
   }
 
-  // Auto-refresh check every minute
+  // Re-render on window resize (mobile/desktop switch)
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      renderScheduleTable(fullSchedule, getCurrentWeekIndex(fullSchedule));
+    }, 250);
+  });
+
   let lastIndex = currentWeekIndex;
-  setInterval(() => {
+  setInterval(function() {
     const nowIndex = getCurrentWeekIndex(fullSchedule);
     if (nowIndex !== lastIndex) {
       lastIndex = nowIndex;
       renderDashboard(fullSchedule, nowIndex);
-      
       let filtered = fullSchedule;
       if (currentFilter) {
-        filtered = filtered.filter(w => 
-          w.first === currentFilter || w.second === currentFilter || w.third === currentFilter
-        );
+        filtered = filtered.filter(function(w) {
+          return w.first === currentFilter || w.second === currentFilter || w.third === currentFilter;
+        });
       }
       renderScheduleTable(filtered, nowIndex);
       checkNewWeek(fullSchedule);
@@ -591,5 +529,4 @@ function init() {
   }, 60000);
 }
 
-// Start the app
 window.addEventListener("DOMContentLoaded", init);
