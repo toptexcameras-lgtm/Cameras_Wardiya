@@ -558,16 +558,16 @@ body::after {
 
   .main-content { padding-bottom: 90px; }
 
+  
   /* Mobile Dashboard */
-  /* Creative Mobile Dashboard */
   .dashboard {
     display: flex !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
     scroll-behavior: smooth !important;
     -webkit-overflow-scrolling: touch !important;
-    gap: 20px !important;
-    padding: 12px 20px !important;
+    gap: 16px !important;
+    padding: 8px 16px !important;
     margin: 0 -12px !important;
   }
 
@@ -575,65 +575,49 @@ body::after {
     display: none;
   }
 
-  /* Creative Card Design */
   .week-card {
-    flex: 0 0 88% !important;
+    flex: 0 0 92% !important;
     scroll-snap-align: center !important;
-    padding: 0 !important;
+    padding: 18px 14px !important;
     max-width: 100% !important;
-    border-radius: 24px !important;
-    overflow: hidden !important;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
-    transform: scale(0.95) !important;
+    border-radius: 18px !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
   }
 
-  /* Center card scales up */
-  .week-card:nth-child(2) {
-    transform: scale(1) !important;
-  }
-
-  /* Current week - special gradient design */
   .week-card.current {
-    flex: 0 0 90% !important;
-    transform: scale(1.02) !important;
-    border: none !important;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    box-shadow: 0 16px 40px rgba(16,185,129,.4), 0 0 0 3px rgba(16,185,129,0.2) !important;
+    flex: 0 0 92% !important;
+    border-width: 3px !important;
+    box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
   }
 
-  .week-card.current .week-header,
-  .week-card.current .date-range,
-  .week-card.current .shift-role,
-  .week-card.current .week-note {
-    color: #fff !important;
+  .date-range {
+    font-size: 0.95rem !important;
+    padding: 12px 10px !important;
+    margin-bottom: 14px !important;
   }
 
-  .week-card.current .date-range {
-    background: rgba(255,255,255,0.2) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
+  .shift-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
   }
 
-  .week-card.current .shift-item {
-    background: rgba(255,255,255,0.15) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
+  .shift-item {
+    padding: 12px 10px !important;
   }
 
-  .week-card.current .shift-role {
-    background: rgba(255,255,255,0.25) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
-    color: #fff !important;
+  .shift-role {
+    font-size: 0.72rem !important;
   }
 
-  .week-card.current .week-note {
-    background: rgba(255,255,255,0.2) !important;
-    border: 1px solid rgba(255,255,255,0.3) !important;
+  .person-badge {
+    padding: 7px 14px !important;
+    font-size: 0.92rem !important;
   }
 
-  .week-card.current::before {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
-    box-shadow: 0 4px 20px rgba(251,191,36,0.6) !important;
-    animation: pulse-gold 2s infinite !important;
+  .week-note {
+    margin-top: 14px !important;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
   }
 
   @keyframes pulse-gold {
