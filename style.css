@@ -577,7 +577,7 @@ body[dir="rtl"] .week-note {
   .app-shell {
     grid-template-columns: 1fr;
     gap: 0;
-    padding: 12px;
+    padding: 18px;
   }
 
   .side-nav {
@@ -590,7 +590,7 @@ body[dir="rtl"] .week-note {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    padding: 14px;
+    padding: 20px;
     border-radius: 16px;
   }
 
@@ -599,11 +599,11 @@ body[dir="rtl"] .week-note {
   .nav-item {
     margin: 0;
     justify-content: center;
-    padding: 14px 10px;
+    padding: 16px 12px;
     font-size: 0.9rem;
   }
 
-  .main-content { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .main-content { padding-bottom: calc(130px + env(safe-area-inset-bottom)); }
 
   /* Mobile Dashboard */
   /* Creative Mobile Dashboard */
