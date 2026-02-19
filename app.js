@@ -526,5 +526,3 @@ const isMobileLike = () =>
     window.matchMedia("(max-width: 820px)").matches ||
     window.matchMedia("(hover: none) and (pointer: coarse)").matches
   ));
-
-
