@@ -164,9 +164,9 @@ body::after {
 /* Dashboard */
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 320px));
   gap: 20px;
-  max-width: 1100px;
+  justify-content: center;
 }
 
 .week-card {
@@ -177,7 +177,6 @@ body::after {
   border: 1px solid var(--border);
   transition: transform .25s ease, box-shadow .25s ease;
   position: relative;
-  max-width: 340px;
   width: 100%;
 }
 
@@ -666,7 +665,7 @@ body[dir="rtl"] .week-note {
     scroll-snap-align: center !important;
     scroll-snap-stop: always !important;
     padding: 18px 14px 14px 14px !important;
-    max-width: 420px !important;
+    max-width: 100% !important;
     min-width: 0 !important;
     border-radius: 18px !important;
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
@@ -680,7 +679,6 @@ body[dir="rtl"] .week-note {
 
   .week-card.current {
     flex: 0 0 92% !important;
-    max-width: 420px !important;
     transform: scale(1) !important;
     border-width: 3px !important;
     box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
@@ -873,7 +871,10 @@ body[dir="rtl"] .week-note {
    so max-width media queries won't fire until the user zooms.
    This block forces the mobile layout on touch devices from first paint. */
 /* ============================= */
-@media (hover: none) and (pointer: coarse) {
+/* ===================================================
+   TOUCH DEVICE — MOBILE (narrow viewport, swipe mode)
+   =================================================== */
+@media (hover: none) and (pointer: coarse) and (max-width: 860px) {
   .app-shell {
     grid-template-columns: 1fr;
     gap: 0;
@@ -905,7 +906,6 @@ body[dir="rtl"] .week-note {
 
   .main-content { padding-bottom: 90px; }
 
-  /* Keep the mobile "swipe cards" dashboard */
   .dashboard {
     display: flex !important;
     overflow-x: auto !important;
@@ -925,7 +925,7 @@ body[dir="rtl"] .week-note {
     scroll-snap-align: center !important;
     scroll-snap-stop: always !important;
     padding: 18px 14px 14px 14px !important;
-    max-width: 420px !important;
+    max-width: 100% !important;
     min-width: 0 !important;
     border-radius: 18px !important;
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
@@ -935,10 +935,98 @@ body[dir="rtl"] .week-note {
   .week-card:nth-child(2) { transform: scale(1) !important; }
   .week-card.current {
     flex: 0 0 92% !important;
-    max-width: 420px !important;
     transform: scale(1) !important;
     border-width: 3px !important;
     box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
+  }
+}
+
+/* ===================================================
+   TOUCH DEVICE — VIEW AS DESKTOP (wide viewport)
+   Shows 3 fixed-size cards side by side, no stretch
+   =================================================== */
+@media (hover: none) and (pointer: coarse) and (min-width: 861px) {
+  .app-shell {
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    padding: 16px;
+    max-width: 1100px;
+  }
+
+  .side-nav {
+    position: sticky;
+    top: 16px;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 20px 14px;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .brand, .nav-hint { display: block; }
+
+  .nav-item {
+    margin-bottom: 8px;
+    justify-content: flex-start;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 10px;
+  }
+
+  .nav-item.active {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .main-content { padding-bottom: 0; }
+
+  /* 3-column grid, fixed card size — no stretch */
+  .dashboard {
+    display: grid !important;
+    grid-template-columns: repeat(3, 280px) !important;
+    gap: 20px !important;
+    justify-content: center !important;
+    overflow-x: visible !important;
+    scroll-snap-type: none !important;
+    padding: 8px 4px !important;
+    margin: 0 !important;
+  }
+
+  .week-card {
+    flex: none !important;
+    width: 280px !important;
+    max-width: 280px !important;
+    min-width: 280px !important;
+    scroll-snap-align: none !important;
+    padding: 20px 16px 16px !important;
+    border-radius: 16px !important;
+    transform: none !important;
+    transition: transform .25s ease, box-shadow .25s ease !important;
+  }
+
+  .week-card:hover {
+    transform: translateY(-2px) !important;
+  }
+
+  .week-card.current {
+    flex: none !important;
+    width: 280px !important;
+    max-width: 280px !important;
+    min-width: 280px !important;
+    transform: translateY(-4px) scale(1.03) !important;
+    border-width: 3px !important;
+    box-shadow: 0 14px 30px rgba(16,185,129,.30) !important;
+  }
+
+  .shift-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
