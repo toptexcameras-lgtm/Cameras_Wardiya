@@ -216,7 +216,7 @@ function renderDashboard(schedule, currentWeekIndex){
         if(holidaySet.has(offStr)){
           return `<div class="week-note">ℹ️ متوقع إجازة رسمية مرحلة للخميس</div>`;
         }
-        return `<div class="week-note">📋 Regular work week</div>`;
+        return ``;
       })()}
     `;
     container.appendChild(card);
