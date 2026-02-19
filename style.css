@@ -31,13 +31,14 @@ body {
 
 
 
+
 .app-shell {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 20px;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 28px 28px;
+  padding: 28px 32px;
   min-height: 100vh;
   position: relative;
   z-index: 1;
@@ -836,10 +837,10 @@ body[dir="rtl"] .week-note {
 }
 /* Extra small phones */
 
-/* ============================= */
-/* Touch — NORMAL PHONE (narrow) */
-/* Swipe cards layout            */
-/* ============================= */
+/* ================================
+   TOUCH — NORMAL PHONE (≤820px)
+   Swipe cards, bottom nav pill
+   ================================ */
 @media (hover: none) and (pointer: coarse) and (max-width: 820px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -868,6 +869,19 @@ body[dir="rtl"] .week-note {
     justify-content: center;
     padding: 12px 8px;
     font-size: 0.85rem;
+    border-radius: 999px;
+    color: rgba(255,255,255,0.82);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+  }
+  .nav-item:hover  { background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.92); }
+  .nav-item:active { transform: translateY(1px) scale(0.99); }
+  .nav-item.active {
+    color: #fff;
+    border-color: rgba(255,255,255,0.18);
+    background: linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
+    box-shadow: 0 10px 22px rgba(0,0,0,0.35);
   }
 
   .main-content { padding-bottom: 90px; }
@@ -881,10 +895,10 @@ body[dir="rtl"] .week-note {
     gap: 16px !important;
     padding: 8px 16px !important;
     margin: 0 -12px !important;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
   }
-
   .dashboard::-webkit-scrollbar { display: none; }
-  .dashboard { -ms-overflow-style: none; scrollbar-width: none; }
 
   .week-card {
     flex: 0 0 92% !important;
@@ -897,7 +911,6 @@ body[dir="rtl"] .week-note {
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
     transform: scale(0.96) !important;
   }
-
   .week-card:nth-child(2) { transform: scale(1) !important; }
   .week-card.current {
     flex: 0 0 92% !important;
@@ -905,30 +918,99 @@ body[dir="rtl"] .week-note {
     border-width: 3px !important;
     box-shadow: 0 16px 32px rgba(16,185,129,.32) !important;
   }
+  .week-card.current::before,
+  .week-card.last::before,
+  .week-card.next::before {
+    top: -9px !important;
+    font-size: 0.68rem !important;
+    padding: 6px 14px !important;
+    max-width: calc(100% - 20px);
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .date-range   { font-size: 0.95rem !important; padding: 12px 10px !important; margin-bottom: 14px !important; font-weight: 700 !important; }
+  .shift-grid   { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .shift-item   { padding: 12px 10px !important; border-radius: 10px !important; }
+  .shift-role   { font-size: 0.72rem !important; margin-bottom: 8px !important; padding: 4px 9px !important; }
+  .shift-person { font-size: 1.05rem !important; }
+  .person-badge { padding: 7px 14px !important; font-size: 0.92rem !important; }
+  .off-badge    { padding: 9px 16px !important; font-size: 0.88rem !important; }
+  .off-note     { font-size: 0.78rem !important; margin-top: 8px !important; }
+  .week-note    { margin-top: 14px !important; padding: 10px 12px !important; font-size: 0.8rem !important; line-height: 1.4 !important; }
+
+  .week-card.empty-card {
+    background: linear-gradient(135deg, #fafafa, #f5f5f5) !important;
+    border: 2px dashed #d1d5db !important;
+  }
+
+  /* Mobile Schedule */
+  .scroll-hint      { display: block; }
+  .schedule-table   { display: none !important; }
+  #scheduleContainer { display: flex !important; flex-direction: column !important; gap: 12px !important; }
+
+  .schedule-card {
+    display: block !important;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+  }
+  #scheduleContainer .schedule-card:not(.current-week):nth-child(even) { background: #f8fafc; }
+  .schedule-card.current-week {
+    border: 2px solid var(--current-green);
+    background: linear-gradient(135deg, #ffffff 0%, rgba(209,250,229,0.3) 100%);
+    box-shadow: 0 4px 16px rgba(16,185,129,0.2);
+  }
+  .schedule-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  .schedule-card.current-week .schedule-card-header { border-bottom-color: var(--current-green); }
+  .schedule-week-num { font-family: "Syne", system-ui, sans-serif; font-weight: 800; font-size: 0.95rem; }
+  .schedule-week-num::before { content: "Week "; }
+  .schedule-card.current-week .schedule-week-num { color: var(--current-green); }
+  .schedule-dates { font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; }
+  .schedule-shifts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .schedule-shift-item { text-align: center; }
+  .schedule-shift-label { font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; display: block; }
+  .schedule-card .person-badge { font-size: 0.8rem; padding: 5px 10px; }
+  .schedule-note { font-size: 0.78rem; color: var(--text-secondary); padding: 10px 12px; background: rgba(37,99,235,0.05); border-radius: 8px; text-align: center; margin-top: 10px; line-height: 1.5; font-weight: 600; }
+  .schedule-note.holiday { background: rgba(251,191,36,0.15); color: #92400e; font-weight: 700; }
 }
 
-/* ============================= */
-/* Touch — VIEW AS DESKTOP       */
-/* Wide viewport on phone:       */
-/* 3 fixed cards + desktop table */
-/* ============================= */
+/* ================================
+   TOUCH — VIEW AS DESKTOP (>820px)
+   Full desktop layout:
+   sidebar + 3 fixed cards + table
+   ================================ */
 @media (hover: none) and (pointer: coarse) and (min-width: 821px) {
+  /* Full desktop layout — sidebar visible */
   .app-shell {
     grid-template-columns: 240px 1fr;
     gap: 20px;
-    padding: 28px;
+    padding: 28px 32px;
   }
 
   .side-nav {
     position: sticky;
     top: 28px;
-    background: rgba(255, 255, 255, 0.95);
+    left: auto; right: auto; bottom: auto;
+    background: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 24px 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
     height: fit-content;
+    display: flex;
+    flex-direction: column;
   }
 
   .brand, .nav-hint { display: block; }
@@ -946,28 +1028,31 @@ body[dir="rtl"] .week-note {
     border-radius: 10px;
     font-size: 0.95rem;
     justify-content: flex-start;
+    font-weight: 600;
   }
+  .nav-item:hover  { background: var(--light); color: var(--text-primary); }
   .nav-item.active { background: var(--primary); color: #fff; }
 
   .main-content { padding-bottom: 0; }
 
-  /* 3 fixed-width equal-height cards */
+  /* Dashboard: 3 fixed-width equal-height cards */
   .dashboard {
     display: grid !important;
-    grid-template-columns: repeat(3, 280px) !important;
+    grid-template-columns: repeat(3, minmax(0, 300px)) !important;
     justify-content: center !important;
     gap: 20px !important;
     align-items: stretch !important;
     overflow: visible !important;
-    padding: 12px 4px !important;
+    padding: 16px 4px !important;
     margin: 0 !important;
+    scroll-snap-type: none !important;
   }
 
   .week-card {
-    width: 280px !important;
-    min-width: 280px !important;
-    max-width: 280px !important;
     flex: none !important;
+    width: 100% !important;
+    max-width: 300px !important;
+    min-width: 0 !important;
     scroll-snap-align: none !important;
     transform: none !important;
     padding: 20px 16px 16px !important;
@@ -975,7 +1060,7 @@ body[dir="rtl"] .week-note {
     display: flex !important;
     flex-direction: column !important;
   }
-  .week-card .shift-grid { flex: 1; align-content: start; }
+  .week-card .shift-grid { flex: 1 !important; align-content: start !important; }
   .week-card:hover   { transform: translateY(-2px) !important; }
   .week-card.current {
     transform: translateY(-4px) scale(1.03) !important;
@@ -983,12 +1068,14 @@ body[dir="rtl"] .week-note {
     box-shadow: 0 14px 30px rgba(16,185,129,.30) !important;
   }
 
-  .shift-grid { grid-template-columns: 1fr !important; }
+  /* Shift grid: 1 column inside each card (like screenshot) */
+  .shift-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
 
-  /* Desktop table visible in View as Desktop */
-  .schedule-table { display: table !important; }
-  .schedule-card  { display: none !important; }
-  .scroll-hint    { display: none !important; }
+  /* Full schedule: show table, hide mobile cards */
+  .schedule-table   { display: table !important; }
+  .schedule-card    { display: none !important; }
+  .scroll-hint      { display: none !important; }
+  #scheduleContainer { overflow-x: auto; }
 }
 
 /* Prevent accidental horizontal scrolling on small screens */
