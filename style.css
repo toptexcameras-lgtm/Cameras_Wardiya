@@ -76,6 +76,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
+      align-items: stretch;
     }
 
     .week-card{
@@ -87,7 +88,26 @@
       transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
       position: relative;
       overflow: visible;
+      display: flex;
+      flex-direction: column;
     }
+    .week-card .shift-grid{ flex: 1; align-content: start; }
+
+    /* ---- View as Desktop ----
+       Phone using "Request Desktop Site": pointer:coarse but viewport > 820px.
+       Cap card width so they don't stretch, keep equal height.          */
+    @media (hover: none) and (pointer: coarse) and (min-width: 821px) {
+      .dashboard{
+        grid-template-columns: repeat(3, minmax(0, 290px)) !important;
+        justify-content: center !important;
+        gap: 14px !important;
+      }
+      .week-card{
+        max-width: 290px !important;
+        width: 100% !important;
+      }
+    }
+
     .week-card:hover{ box-shadow: var(--shadow-hover); transform: translateY(-2px); }
 
     .week-card.empty-card{
@@ -466,17 +486,6 @@
       display: grid !important;
       grid-template-columns: repeat(3, minmax(0,1fr)) !important;
       gap: 14px !important;
-      align-items: stretch !important;   /* equal height columns */
-    }
-
-    /* Make every card a flex column so siblings grow to same height */
-    .week-card{
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .week-card .shift-grid{
-      flex: 1;
-      align-content: start;
     }
 
     /* Medium cards */
@@ -512,25 +521,6 @@
     .date-range{
       font-size: 15px !important;
       padding: 10px 10px !important;
-    }
-
-    /* =========================================
-       VIEW AS DESKTOP — touch device, wide viewport
-       Phone in "Request Desktop Site" mode has
-       pointer:coarse but viewport width > 820px.
-       Cap each card so they don't stretch and
-       keep equal height via the flex column above.
-       ========================================= */
-    @media (hover: none) and (pointer: coarse) and (min-width: 821px) {
-      .dashboard{
-        grid-template-columns: repeat(3, minmax(0, 290px)) !important;
-        justify-content: center !important;
-        gap: 14px !important;
-      }
-      .week-card{
-        max-width: 290px !important;
-        width: 100% !important;
-      }
     }
 
     /* =========================================
