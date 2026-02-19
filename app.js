@@ -520,9 +520,9 @@ function init(){
 }
 
 window.addEventListener("DOMContentLoaded", init);
-// Detect "mobile-ish" mode reliably (handles browsers that start with a wide layout viewport)
+// Detect normal mobile (narrow viewport).
+// View as Desktop (touch + wide viewport) is treated as desktop → shows table.
 const isMobileLike = () =>
-  (window.matchMedia && (
-    window.matchMedia("(max-width: 820px)").matches ||
-    window.matchMedia("(hover: none) and (pointer: coarse)").matches
-  ));
+  window.matchMedia("(max-width: 820px)").matches ||
+  (window.matchMedia("(hover: none) and (pointer: coarse)").matches &&
+   window.matchMedia("(max-width: 820px)").matches);
