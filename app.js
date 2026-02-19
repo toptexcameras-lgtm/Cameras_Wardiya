@@ -520,9 +520,6 @@ function init(){
 }
 
 window.addEventListener("DOMContentLoaded", init);
-// Detect normal mobile (narrow viewport).
-// View as Desktop (touch + wide viewport) is treated as desktop → shows table.
-const isMobileLike = () =>
-  window.matchMedia("(max-width: 820px)").matches ||
-  (window.matchMedia("(hover: none) and (pointer: coarse)").matches &&
-   window.matchMedia("(max-width: 820px)").matches);
+// Mobile = narrow viewport only.
+// "View as Desktop" on phone has wide viewport → treated as desktop (shows table).
+const isMobileLike = () => window.matchMedia("(max-width: 820px)").matches;
