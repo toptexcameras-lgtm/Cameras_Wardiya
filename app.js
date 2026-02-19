@@ -519,10 +519,9 @@ function init(){
   }, 60000);
 }
 
-window.addEventListener("DOMContentLoaded", init);
-// Detect "mobile-ish" mode reliably (handles browsers that start with a wide layout viewport)
+// Detect touch/mobile: narrow viewport OR any touch device (handles "View as Desktop" mode)
 const isMobileLike = () =>
-  (window.matchMedia && (
-    window.matchMedia("(max-width: 820px)").matches ||
-    window.matchMedia("(hover: none) and (pointer: coarse)").matches
-  ));
+  window.matchMedia("(max-width: 820px)").matches ||
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
+window.addEventListener("DOMContentLoaded", init);
