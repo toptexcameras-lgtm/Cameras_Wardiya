@@ -228,7 +228,7 @@ function renderDashboard(schedule, currentWeekIndex){
         const offStr = formatDate(offDate);
         const holidaySet = getHolidaySet();
         if(holidaySet.has(offStr)){
-          return `<div class="week-note">عيد فطر مُبارك 🎉🎉</div>`;
+          return `<div class="week-note">🎉 عيد فطر مُبارك 🎉</div>`;
         }
         return ``;
       })()}
@@ -293,7 +293,7 @@ function renderScheduleTable(scheduleToRender, currentWeekIndex){
           const offStr = formatDate(new Date(week.weekEnd)); 
           const holidaySet = getHolidaySet();
           if(holidaySet.has(offStr)){
-            return `<div class="schedule-note holiday">🎉 عيد فطر مُبارك🎉</div>`;
+            return `<div class="schedule-note holiday">🎉 متوقع اجازة رسمية تُرحل للخميس</div>`;
           }
           return `<div class="schedule-note">Regular OFF Day</div>`;
         })()}
