@@ -2,6 +2,12 @@
 const START_DATE = new Date(2026, 0, 3); // Saturday, Jan 03, 2026
 const TOTAL_WEEKS = 52;
 
+// 🆕 Special Weeks Overrides
+const SPECIAL_WEEKS = {
+  "28/03/2026": { first: "Omar", second: "Yousef", third: "Ahmed" },
+  "04/04/2026": { first: "Ahmed", second: "Yousef", third: "Omar" }
+};
+
 // Helper Functions
 function formatDate(date){
   const day = String(date.getDate()).padStart(2, "0");
@@ -68,6 +74,14 @@ function weekContainsDate(weekObj, dateObj){
 }
 
 function getWeekRotation(weekIndex){
+  const weekStart = addDays(START_DATE, weekIndex * 7);
+  const weekStartStr = formatDate(weekStart);
+
+  // 🔴 Special override
+  if(SPECIAL_WEEKS[weekStartStr]){
+    return SPECIAL_WEEKS[weekStartStr];
+  }
+
   const rotationIndex = weekIndex % 3;
   const rotations = [
     { first: "Ahmed",  second: "Yousef", third: "Omar"  },
@@ -81,7 +95,7 @@ function generateSchedule(){
   const schedule = [];
   for(let i=0;i<TOTAL_WEEKS;i++){
     const weekStart = addDays(START_DATE, i*7);
-    const weekEnd   = addDays(weekStart, 5); // Thu (week ends Thursday)
+    const weekEnd   = addDays(weekStart, 5);
     const rotation  = getWeekRotation(i);
     schedule.push({
       weekNumber: i+1,
