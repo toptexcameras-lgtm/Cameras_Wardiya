@@ -93,6 +93,7 @@ function getWeekRotation(weekIndex){
     ];
     return rotations[rotationIndex];
   }
+  else{
 
   // ✅ Old rotation preserved (weeks 0–13)
   const rotationIndex = weekIndex % 3;
@@ -102,6 +103,7 @@ function getWeekRotation(weekIndex){
     { first: "Omar",   second: "Ahmed",  third: "Yousef"}
   ];
   return rotations[rotationIndex];
+  }
 }
 
 function generateSchedule(){
@@ -241,7 +243,7 @@ function renderDashboard(schedule, currentWeekIndex){
         const offStr = formatDate(offDate);
         const holidaySet = getHolidaySet();
         if(holidaySet.has(offStr)){
-          return `<div class="week-note">🎉 عيد فطر مُبارك 🎉</div>`;
+          return `<div class="week-note">🎉متوقع اجازة رسمية🎉</div>`;
         }
         return ``;
       })()}
@@ -306,7 +308,7 @@ function renderScheduleTable(scheduleToRender, currentWeekIndex){
           const offStr = formatDate(new Date(week.weekEnd)); 
           const holidaySet = getHolidaySet();
           if(holidaySet.has(offStr)){
-            return `<div class="schedule-note holiday">🎉 متوقع اجازة رسمية تُرحل للخميس</div>`;
+            return `<div class="schedule-note holiday">🎉 متوقع اجازة رسمية  </div>`;
           }
           return `<div class="schedule-note">Regular OFF Day</div>`;
         })()}
