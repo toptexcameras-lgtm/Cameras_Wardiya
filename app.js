@@ -11,7 +11,7 @@ const SPECIAL_WEEKS = {
 // 🆕 New Rotation Start Date
 const NEW_ROTATION_DATE = "11/04/2026";
 
-// 🆕 Holidays with Names
+// 🆕 Holidays with Names (Egypt)
 const HOLIDAYS_DEFAULT = {
   "08/01/2026": "إجازة رسمية",
   "29/01/2026": "إجازة رسمية",
@@ -82,18 +82,19 @@ function weekContainsDate(weekObj, dateObj){
   return dateObj >= ws && dateObj < we;
 }
 
+// 🔥 Rotation Logic
 function getWeekRotation(weekIndex){
   const weekStart = addDays(START_DATE, weekIndex * 7);
   const weekStartStr = formatDate(weekStart);
 
-  // 🔴 Special override
+  // Special override
   if(SPECIAL_WEEKS[weekStartStr]){
     return SPECIAL_WEEKS[weekStartStr];
   }
 
   const newRotationDateObj = parseDDMMYYYY(NEW_ROTATION_DATE);
 
-  // 🆕 New system after 11/04
+  // New system
   if(weekStart >= newRotationDateObj){
     const diffDays = Math.floor((weekStart - newRotationDateObj) / (1000 * 60 * 60 * 24));
     const newIndex = Math.floor(diffDays / 7) % 3;
@@ -107,7 +108,7 @@ function getWeekRotation(weekIndex){
     return newRotations[newIndex];
   }
 
-  // 🔵 Old system
+  // Old system
   const rotationIndex = weekIndex % 3;
   const rotations = [
     { first: "Ahmed",  second: "Yousef", third: "Omar"  },
@@ -215,7 +216,7 @@ function renderDashboard(schedule, currentWeekIndex){
 
     card.className = className;
     card.setAttribute('data-card-index', c.index);
-    
+
     const offDate = new Date(week.weekEnd);
     const offStr = formatDate(offDate);
     const holidayMap = getHolidayMap();
@@ -252,11 +253,18 @@ function renderDashboard(schedule, currentWeekIndex){
     `;
     container.appendChild(card);
   });
+
+  if(isMobileLike()){
+    setTimeout(() => {
+      const currentCard = container.querySelector('.week-card.current');
+      if(currentCard){
+        currentCard.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+      }
+    }, 100);
+  }
 }
 
-// باقي الكود زي ما هو (Render Table + Filters + Init)
-// بدون أي تغيير غير موضوع الإجازات
-
+// Render Schedule Table
 function renderScheduleTable(scheduleToRender, currentWeekIndex){
   const container = document.getElementById("scheduleContainer");
   if(!container) return;
@@ -271,7 +279,7 @@ function renderScheduleTable(scheduleToRender, currentWeekIndex){
     const holidayMap = getHolidayMap();
 
     html += `<tr>
-      <td>${week.weekNumber}</td>
+      <td><strong>Week ${week.weekNumber}</strong></td>
       <td>${week.weekStartFormatted}</td>
       <td>${week.weekEndFormatted}</td>
       <td>${week.first}</td>
@@ -297,3 +305,6 @@ function init(){
 }
 
 window.addEventListener("DOMContentLoaded", init);
+
+// Mobile check
+const isMobileLike = () => window.matchMedia("(max-width: 820px)").matches;
