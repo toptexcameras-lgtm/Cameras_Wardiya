@@ -44,7 +44,7 @@ const HOLIDAY_NAMES = {
   "07/01/2026": "عيد الميلاد المجيد 🎄",
   "25/01/2026": "عيد الشرطة وثورة 25 يناير 🇪🇬",
   "20/03/2026": "عيد الفطر المبارك 🌙",
-  "13/04/2026": "شم النسيم 🌸",
+  "13/04/2026": "اجازة شم النسيم يوم الاثنين🌸",
   "25/04/2026": "عيد تحرير سيناء 🦅",
   "01/05/2026": "عيد العمال 👷",
   "26/05/2026": "وقفة عرفات 🕌",
@@ -60,14 +60,14 @@ function getHolidayName(dateStr){
   return HOLIDAY_NAMES[dateStr] || "إجازة رسمية 🎉";
 }
 
-function getHolidaySet(){
+function getHolidayMap(){
   try{
     const raw = localStorage.getItem("wardiya_holidays");
-    const arr = raw ? JSON.parse(raw) : HOLIDAYS_DEFAULT;
-    if(!Array.isArray(arr)) return new Set(HOLIDAYS_DEFAULT);
-    return new Set(arr);
+    const obj = raw ? JSON.parse(raw) : HOLIDAY_NAMES;
+    if(typeof obj !== "object") return new Map(Object.entries(HOLIDAY_NAMES));
+    return new Map(Object.entries(obj));
   }catch(_){
-    return new Set(HOLIDAYS_DEFAULT);
+    return new Map(Object.entries(HOLIDAY_NAMES));
   }
 }
 
@@ -253,21 +253,21 @@ function renderDashboard(schedule, currentWeekIndex){
         ${(() => {
           const offDate = new Date(week.weekEnd);
           const offStr = formatDate(offDate);
-          const holidaySet = getHolidaySet();
+          const holidaySet = getHolidayMap();
           if(holidaySet.has(offStr)){
             return `<div class="off-note holiday">🎉 ${getHolidayName(offStr)}</div>`;
           }
-          return ``;
+          else{return ``;}
         })()}
       </div>
       ${(() => {
         const offDate = new Date(week.weekEnd);
         const offStr = formatDate(offDate);
-        const holidaySet = getHolidaySet();
+        const holidaySet = getHolidayMap();
         if(holidaySet.has(offStr)){
           return `<div class="week-note">🎉 ${getHolidayName(offStr)} 🎉</div>`;
         }
-        return ``;
+        else{return ``;}
       })()}
     `;
     container.appendChild(card);
@@ -328,11 +328,11 @@ function renderScheduleTable(scheduleToRender, currentWeekIndex){
         </div>
         ${(()=>{
           const offStr = formatDate(new Date(week.weekEnd)); 
-          const holidaySet = getHolidaySet();
+          const holidaySet = getHolidayMap();
           if(holidaySet.has(offStr)){
             return `<div class="schedule-note holiday">🎉 ${getHolidayName(offStr)}</div>`;
           }
-          return `<div class="schedule-note">Regular OFF Day</div>`;
+          else{return `<div class="schedule-note">Regular OFF Day</div>`;}
         })()}
       `;
       
@@ -359,11 +359,10 @@ function renderScheduleTable(scheduleToRender, currentWeekIndex){
         <td><span class="person-badge ${getPersonClass(week.third)}">${week.third}</span></td>
         <td>${(()=>{
           const offStr = formatDate(new Date(week.weekEnd)); 
-          const holidaySet = getHolidaySet();
+          const holidaySet = getHolidayMap();
           if(holidaySet.has(offStr)){
             return `🎉 ${getHolidayName(offStr)}`;
           }
-          return `Regular OFF`;
         })()}</td>
       </tr>`;
     });
