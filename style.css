@@ -176,49 +176,107 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 .section-header{padding:0 4px}
 .section-title{font-size:1.2rem}
 
-/* Mobile Dashboard — all 3 cards visible, no scroll, Next Week biggest */
-.dashboard{display:flex!important;flex-direction:column!important;gap:10px!important;padding:4px 8px!important;margin:0!important;overflow:visible!important}
-.dashboard::-webkit-scrollbar{display:none}
+/* ════════════════════════════════════
+   Dashboard: Hero Layout
+   Next Week = full-width HERO on top
+   Current + Last = compact side-by-side
+   ════════════════════════════════════ */
+.dashboard{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  grid-template-rows:auto auto!important;
+  gap:10px 8px!important;
+  padding:6px 4px!important;
+  margin:0!important;
+  overflow:visible!important
+}
+.week-card{
+  flex:none!important;width:100%!important;
+  scroll-snap-align:none!important;
+  transform:none!important;max-width:100%!important
+}
 
-/* Base card reset for mobile */
-.week-card{flex:none!important;width:100%!important;scroll-snap-align:none!important;border-radius:14px!important;transform:none!important;max-width:100%!important}
-
-/* Last Week — compact, muted */
-.week-card.last{padding:8px 12px!important;opacity:.65}
-.week-card.last .week-header{margin-bottom:2px}
-.week-card.last .week-label{font-size:.6rem!important;margin-bottom:2px}
-.week-card.last .date-range{font-size:.72rem!important;padding:4px 6px!important;margin-bottom:6px!important}
-.week-card.last .shift-grid{grid-template-columns:repeat(3,1fr)!important;gap:4px!important}
-.week-card.last .shift-item{padding:4px 6px!important;flex-direction:column!important}
-.week-card.last .shift-role{font-size:.55rem!important;margin-bottom:2px!important;padding:2px 5px!important}
-.week-card.last .person-badge{font-size:.68rem!important;padding:3px 8px!important}
-.week-card.last::before{font-size:.55rem!important;padding:3px 10px!important;top:-7px!important}
-.week-card.last .week-note,.week-card.last .card-notes,.week-card.last .off-badge,.week-card.last .off-note{display:none!important}
-
-/* Current Week — medium */
-.week-card.current{padding:10px 12px 10px!important}
-.week-card.current .week-header{margin-bottom:2px}
-.week-card.current .week-label{font-size:.62rem!important;margin-bottom:2px}
-.week-card.current .date-range{font-size:.78rem!important;padding:5px 8px!important;margin-bottom:8px!important}
-.week-card.current .shift-grid{grid-template-columns:repeat(3,1fr)!important;gap:5px!important}
-.week-card.current .shift-item{padding:6px 8px!important;flex-direction:column!important}
-.week-card.current .shift-role{font-size:.58rem!important;margin-bottom:3px!important;padding:2px 6px!important}
-.week-card.current .person-badge{font-size:.74rem!important;padding:4px 10px!important}
-.week-card.current::before{font-size:.58rem!important;padding:4px 12px!important;top:-8px!important}
-
-/* Next Week — HERO card, biggest */
-.week-card.next{padding:14px 14px 12px!important}
-.week-card.next .week-header{margin-bottom:4px}
-.week-card.next .week-label{font-size:.68rem!important;margin-bottom:4px}
-.week-card.next .date-range{font-size:.88rem!important;padding:8px 10px!important;margin-bottom:10px!important}
+/* ── NEXT WEEK — HERO ── */
+.week-card.next{
+  grid-column:1 / -1!important;
+  order:-1!important;
+  padding:16px 16px 14px!important;
+  border-radius:18px!important;
+  border:1.5px solid rgba(239,68,68,.45)!important;
+  background:linear-gradient(150deg,rgba(239,68,68,.1) 0%,rgba(168,85,247,.06) 50%,var(--card) 100%)!important;
+  box-shadow:0 0 40px rgba(239,68,68,.1),0 0 80px rgba(168,85,247,.05),0 8px 32px rgba(0,0,0,.3)!important
+}
+.week-card.next::before{
+  font-size:.65rem!important;padding:5px 18px!important;top:-10px!important;
+  background:linear-gradient(135deg,#ef4444,#f97316)!important;
+  box-shadow:0 4px 20px rgba(239,68,68,.4)!important;
+  animation:pulseGlow 2s infinite!important
+}
+.week-card.next .week-label{font-size:.56rem!important;margin-bottom:2px!important;color:rgba(255,255,255,.4)!important}
+.week-card.next .date-range{
+  font-size:.95rem!important;padding:10px 12px!important;margin-bottom:12px!important;
+  background:rgba(239,68,68,.06)!important;border-color:rgba(239,68,68,.18)!important;
+  font-weight:800!important;letter-spacing:.3px
+}
 .week-card.next .shift-grid{grid-template-columns:1fr!important;gap:6px!important}
-.week-card.next .shift-item{flex-direction:row!important;justify-content:space-between!important;padding:8px 12px!important}
-.week-card.next .shift-role{font-size:.65rem!important;margin-bottom:0!important;padding:3px 8px!important}
-.week-card.next .person-badge{font-size:.82rem!important;padding:5px 12px!important}
-.week-card.next::before{font-size:.62rem!important;padding:5px 14px!important;top:-9px!important}
+.week-card.next .shift-item{
+  flex-direction:row!important;justify-content:space-between!important;
+  padding:10px 14px!important;
+  background:rgba(255,255,255,.04)!important;border-radius:12px!important;
+  border:1px solid rgba(255,255,255,.06)!important
+}
+.week-card.next .shift-role{
+  font-size:.6rem!important;margin-bottom:0!important;padding:3px 10px!important;
+  background:rgba(239,68,68,.08)!important;border-color:rgba(239,68,68,.15)!important
+}
+.week-card.next .person-badge{font-size:.88rem!important;padding:5px 16px!important;font-weight:800!important}
+.week-card.next .week-note,.week-card.next .card-notes{
+  margin-top:8px!important;font-size:.72rem!important;padding:6px 10px!important
+}
 
-/* Empty card compact */
-.week-card.empty-card{padding:8px!important}
+/* ── CURRENT WEEK — compact, bottom-left ── */
+.week-card.current{
+  order:1!important;
+  padding:10px 10px 8px!important;
+  border-radius:14px!important;
+  border-width:1.5px!important
+}
+.week-card.current::before{font-size:.5rem!important;padding:3px 10px!important;top:-8px!important}
+.week-card.current .week-label{font-size:.46rem!important;margin-bottom:1px!important}
+.week-card.current .date-range{
+  font-size:.7rem!important;padding:5px 6px!important;margin-bottom:6px!important;font-weight:700!important
+}
+.week-card.current .shift-grid{grid-template-columns:1fr!important;gap:2px!important}
+.week-card.current .shift-item{
+  flex-direction:row!important;justify-content:space-between!important;
+  padding:3px 8px!important;background:rgba(255,255,255,.03)!important;border-radius:8px!important
+}
+.week-card.current .shift-role{font-size:.44rem!important;margin-bottom:0!important;padding:1px 5px!important}
+.week-card.current .person-badge{font-size:.68rem!important;padding:2px 8px!important}
+.week-card.current .week-note,.week-card.current .card-notes{display:none!important}
+
+/* ── LAST WEEK — compact, muted, bottom-right ── */
+.week-card.last{
+  order:2!important;
+  padding:10px 10px 8px!important;
+  border-radius:14px!important;
+  opacity:.5!important
+}
+.week-card.last::before{font-size:.5rem!important;padding:3px 10px!important;top:-8px!important}
+.week-card.last .week-label{font-size:.46rem!important;margin-bottom:1px!important}
+.week-card.last .date-range{
+  font-size:.7rem!important;padding:5px 6px!important;margin-bottom:6px!important;font-weight:700!important
+}
+.week-card.last .shift-grid{grid-template-columns:1fr!important;gap:2px!important}
+.week-card.last .shift-item{
+  flex-direction:row!important;justify-content:space-between!important;
+  padding:3px 8px!important;background:rgba(255,255,255,.02)!important;border-radius:8px!important
+}
+.week-card.last .shift-role{font-size:.44rem!important;margin-bottom:0!important;padding:1px 5px!important}
+.week-card.last .person-badge{font-size:.68rem!important;padding:2px 8px!important}
+.week-card.last .week-note,.week-card.last .card-notes,.week-card.last .off-note{display:none!important}
+
+.week-card.empty-card{padding:8px!important;opacity:.25!important}
 
 .scroll-hint{display:block}
 .schedule-table{display:none!important}
@@ -246,9 +304,10 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 }
 
 @media(max-width:380px){
-.week-card.next .date-range{font-size:.78rem!important}
-.week-card.next .person-badge{font-size:.74rem!important;padding:4px 9px!important}
-.week-card.current .person-badge,.week-card.last .person-badge{font-size:.65rem!important;padding:3px 7px!important}
+.week-card.next .date-range{font-size:.82rem!important}
+.week-card.next .person-badge{font-size:.78rem!important;padding:4px 12px!important}
+.week-card.current .person-badge,.week-card.last .person-badge{font-size:.6rem!important;padding:2px 6px!important}
+.week-card.current .date-range,.week-card.last .date-range{font-size:.62rem!important}
 }
 
 /* Touch desktop (View as Desktop on phone) */
