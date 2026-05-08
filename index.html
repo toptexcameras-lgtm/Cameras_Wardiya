@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="description" content="Top Tex — Weekly Shift Rotation Schedule. View current, past, and upcoming shift assignments.">
+  <meta name="theme-color" content="#0a0e1a">
+
+  <title>Top Tex — Shift Schedule</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-inner">
+      <div class="loader-brand">Top Tex</div>
+      <div class="loader-spinner">
+        <div class="spinner-ring"></div>
+      </div>
+      <div class="loader-text">Loading schedule…</div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- New Week Banner -->
+  <div id="newWeekBanner" class="new-week-banner">🎉 New Week Started!</div>
+
+  <div class="app-shell">
+    <!-- Sidebar / Bottom Nav -->
+    <aside class="side-nav">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-title">Top Tex</div>
+        <div class="brand-sub">Shift Rotation</div>
+      </div>
+
+      <button class="nav-item active" data-tab="dashboard" id="navDashboard">
+        <span class="nav-ico">📌</span>
+        <span class="nav-txt">Dashboard</span>
+      </button>
+
+      <button class="nav-item" data-tab="schedule" id="navSchedule">
+        <span class="nav-ico">📅</span>
+        <span class="nav-txt">Full Schedule</span>
+      </button>
+
+      <button class="nav-item" data-tab="admin" id="navAdmin">
+        <span class="nav-ico">🔒</span>
+        <span class="nav-txt">Admin</span>
+      </button>
+
+      <div class="nav-hint">
+        <div class="hint-title">💡 Tip</div>
+        <div class="hint-text">Swipe cards on mobile. Current week is highlighted with a green glow.</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- ═══════ DASHBOARD TAB ═══════ -->
+      <div id="dashboard" class="tab-content active">
+        <div class="section-header">
+          <h1 class="section-title">Dashboard</h1>
+          <button class="download-btn" id="downloadBtn" title="Download as Image">
+            <span class="download-ico">📸</span>
+            <span class="download-txt">Download</span>
+          </button>
+        </div>
+        <div class="dashboard" id="dashboardContent"></div>
+      </div>
+
+      <!-- ═══════ SCHEDULE TAB ═══════ -->
+      <div id="schedule" class="tab-content">
+        <div class="section-header">
+          <h1 class="section-title">Full Schedule</h1>
+        </div>
+        <div class="schedule-section">
+          <div class="schedule-controls">
+            <button class="action-btn" id="goCurrentBtn">
+              <span>📍</span> Go to Current Week
+            </button>
+            <input id="dateSearch" class="date-search" type="date" aria-label="Search by date">
+            <button class="filter-btn" id="clearDateBtn">Clear</button>
+          </div>
+          <div class="scroll-hint">👉 Swipe to see all info</div>
+          <div id="scheduleContainer"></div>
+        </div>
+      </div>
+
+      <!-- ═══════ ADMIN TAB ═══════ -->
+      <div id="admin" class="tab-content">
+        <!-- Password Gate -->
+        <div id="adminGate" class="admin-gate">
+          <div class="gate-card">
+            <div class="gate-icon">🔐</div>
+            <h2 class="gate-title">Admin Access</h2>
+            <p class="gate-desc">Enter the admin password to manage shift overrides.</p>
+            <div class="gate-input-wrap">
+              <input type="password" id="adminPasswordInput" class="gate-input" placeholder="Password" autocomplete="off">
+              <button class="gate-btn" id="adminLoginBtn">Unlock</button>
+            </div>
+            <div id="gateError" class="gate-error"></div>
+          </div>
+        </div>
+
+        <!-- Admin Panel (hidden until authenticated) -->
+        <div id="adminPanel" class="admin-panel" style="display:none;">
+          <div class="section-header">
+            <h1 class="section-title">Admin Panel</h1>
+            <button class="logout-btn" id="adminLogoutBtn">🔓 Lock</button>
+          </div>
+
+          <div class="admin-card">
+            <h3 class="admin-card-title">Override Shift Assignment</h3>
+            <p class="admin-card-desc">Select an upcoming week and assign who takes each shift. Saved overrides sync instantly for all users via Supabase.</p>
+
+            <div class="admin-form">
+              <div class="form-group">
+                <label class="form-label" for="weekSelect">Week Starting (Saturday)</label>
+                <select id="weekSelect" class="form-select"></select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="firstShiftSelect">1st Shift</label>
+                  <select id="firstShiftSelect" class="form-select">
+                    <option value="Ahmed">Ahmed</option>
+                    <option value="Yousef">Yousef</option>
+                    <option value="Omar">Omar</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="secondShiftSelect">2nd Shift</label>
+                  <select id="secondShiftSelect" class="form-select">
+                    <option value="Ahmed">Ahmed</option>
+                    <option value="Yousef">Yousef</option>
+                    <option value="Omar">Omar</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="thirdShiftSelect">3rd Shift</label>
+                  <select id="thirdShiftSelect" class="form-select">
+                    <option value="Ahmed">Ahmed</option>
+                    <option value="Yousef">Yousef</option>
+                    <option value="Omar">Omar</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="notesInput">Daily Exceptions / Notes</label>
+                <textarea id="notesInput" class="form-textarea" rows="3" placeholder="e.g. Omar swaps with Ahmed on Tuesday"></textarea>
+              </div>
+
+              <div class="admin-actions">
+                <button class="save-btn" id="saveOverrideBtn">
+                  <span class="save-ico">💾</span> Save Override
+                </button>
+                <button class="load-btn" id="loadExistingBtn">
+                  <span>📥</span> Load Selected Week
+                </button>
+              </div>
+
+              <div id="adminStatus" class="admin-status"></div>
+            </div>
+          </div>
+
+          <!-- Existing Overrides List -->
+          <div class="admin-card" style="margin-top:20px;">
+            <h3 class="admin-card-title">Saved Overrides</h3>
+            <p class="admin-card-desc">All overrides currently stored in Supabase.</p>
+            <div id="overridesList" class="overrides-list"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- CDN Libraries (loaded at body end to prevent blocking) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
