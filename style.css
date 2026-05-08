@@ -250,6 +250,12 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 .week-card.next .person-badge{font-size:.74rem!important;padding:4px 9px!important}
 .week-card.current .person-badge,.week-card.last .person-badge{font-size:.65rem!important;padding:3px 7px!important}
 }
+/* ═══ MOBILE REORDERING ONLY ═══ */
+@media (max-width: 820px) {
+  .week-card.next { order: 1 !important; }
+  .week-card.current { order: 2 !important; }
+  .week-card.last { order: 3 !important; }
+}
 
 /* Touch desktop (View as Desktop on phone) */
 @media(hover:none) and (pointer:coarse) and (min-width:821px){
