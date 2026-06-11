@@ -103,9 +103,14 @@ function getWeekRotation(weekIndex) {
   if (supabaseOverrides[wsStr]) return supabaseOverrides[wsStr];
   if (SPECIAL_WEEKS[wsStr]) return SPECIAL_WEEKS[wsStr];
   const NEW_ROT_START = 14;
-  if (weekIndex >= NEW_ROT_START) {
+  const NEW_ROT_START2 = 24; 
+  if (weekIndex >= NEW_ROT_START && weekIndex <=NEW_ROT_START2) {
     const ri = (weekIndex - NEW_ROT_START) % 3;
     return [{ first: "Yousef", second: "Omar", third: "Ahmed" }, { first: "Omar", second: "Ahmed", third: "Yousef" }, { first: "Ahmed", second: "Yousef", third: "Omar" }][ri];
+  }
+  if(weekIndex >= NEW_ROT_START2){
+     const ri = (weekIndex - NEW_ROT_STAR2T) % 3;
+    return [{ first: "Omar", second: "Yousef", third: "Ahmed" }, { first: "Yousef", second: "Ahmed", third: "Omar" }, { first: "Ahmed", second: "Omar", third: "Yousef" }][ri]; 
   }
   const ri = weekIndex % 3;
   return [{ first: "Ahmed", second: "Yousef", third: "Omar" }, { first: "Yousef", second: "Omar", third: "Ahmed" }, { first: "Omar", second: "Ahmed", third: "Yousef" }][ri];
