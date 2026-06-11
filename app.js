@@ -125,14 +125,17 @@ function getWeekRotation(weekIndex) {
     { first: "Yousef", second: "Omar", third: "Ahmed" },
     { first: "Omar", second: "Ahmed", third: "Yousef" }
   ];
-
-  if (weekIndex >= NEW_ROT_START2) {
+  if (weekIndex >= NEW_ROT_START && weekIndex < NEW_ROT_START2) {
+    const ri = (weekIndex - NEW_ROT_START) % 3;
+    return rotation1[ri];
+  } else if (weekIndex >= NEW_ROT_START2) {
     const ri = (weekIndex - NEW_ROT_START2) % 3;
     return rotation2[ri];
+  }else{
+    const ri = weekIndex % 3;
+    return rotationDefault[ri];
   }
-
-  const ri = weekIndex % 3;
-  return rotationDefault[ri];
+  
 }
 
 function generateSchedule() {
