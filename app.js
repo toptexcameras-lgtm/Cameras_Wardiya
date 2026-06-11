@@ -106,7 +106,7 @@ function getWeekRotation(weekIndex) {
   if (SPECIAL_WEEKS[wsStr]) return SPECIAL_WEEKS[wsStr];
 
   const NEW_ROT_START = 14;
-  const NEW_ROT_START2 = 24;
+  const NEW_ROT_START2 = 23;
 
   const rotation1 = [
     { first: "Yousef", second: "Omar", third: "Ahmed" },
