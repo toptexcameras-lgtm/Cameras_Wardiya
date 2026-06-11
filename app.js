@@ -23,7 +23,8 @@ const EMPLOYEES = ['Ahmed', 'Yousef', 'Omar'];
 
 const SPECIAL_WEEKS = {
   "28/03/2026": { first: "Omar", second: "Yousef", third: "Ahmed" },
-  "04/04/2026": { first: "Ahmed", second: "Yousef", third: "Omar" }
+  "04/04/2026": { first: "Ahmed", second: "Yousef", third: "Omar" },
+  "13/06/2026": { first: "Omar", second: "Yousef", third: "Ahmed" }
 };
 
 const HOLIDAYS_DEFAULT = ["07/01/2026", "25/01/2026", "20/03/2026", "13/04/2026", "25/04/2026", "01/05/2026", "26/05/2026", "27/05/2026", "17/06/2026", "30/06/2026", "23/07/2026", "26/08/2026", "06/10/2026"];
