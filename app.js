@@ -99,21 +99,42 @@ async function deleteOverride(weekDate) {
 function getWeekRotation(weekIndex) {
   const ws = addDays(START_DATE, weekIndex * 7);
   const wsStr = formatDate(ws);
+
   // Priority: Supabase > SPECIAL_WEEKS > rotation
   if (supabaseOverrides[wsStr]) return supabaseOverrides[wsStr];
   if (SPECIAL_WEEKS[wsStr]) return SPECIAL_WEEKS[wsStr];
+
   const NEW_ROT_START = 14;
-  const NEW_ROT_START2 = 24; 
-  if (weekIndex >= NEW_ROT_START && weekIndex <=NEW_ROT_START2) {
+  const NEW_ROT_START2 = 24;
+
+  const rotation1 = [
+    { first: "Yousef", second: "Omar", third: "Ahmed" },
+    { first: "Omar", second: "Ahmed", third: "Yousef" },
+    { first: "Ahmed", second: "Yousef", third: "Omar" }
+  ];
+
+  const rotation2 = [
+    { first: "Omar", second: "Yousef", third: "Ahmed" },
+    { first: "Yousef", second: "Ahmed", third: "Omar" },
+    { first: "Ahmed", second: "Omar", third: "Yousef" }
+  ];
+
+  const rotationDefault = [
+    { first: "Ahmed", second: "Yousef", third: "Omar" },
+    { first: "Yousef", second: "Omar", third: "Ahmed" },
+    { first: "Omar", second: "Ahmed", third: "Yousef" }
+  ];
+
+  if (weekIndex >= NEW_ROT_START && weekIndex <= NEW_ROT_START2) {
     const ri = (weekIndex - NEW_ROT_START) % 3;
-    return [{ first: "Yousef", second: "Omar", third: "Ahmed" }, { first: "Omar", second: "Ahmed", third: "Yousef" }, { first: "Ahmed", second: "Yousef", third: "Omar" }][ri];
+    return rotation1[ri];
+  } else if (weekIndex >= NEW_ROT_START2) {
+    const ri = (weekIndex - NEW_ROT_START2) % 3;
+    return rotation2[ri];
   }
-  if(weekIndex >= NEW_ROT_START2){
-     const ri = (weekIndex - NEW_ROT_STAR2T) % 3;
-    return [{ first: "Omar", second: "Yousef", third: "Ahmed" }, { first: "Yousef", second: "Ahmed", third: "Omar" }, { first: "Ahmed", second: "Omar", third: "Yousef" }][ri]; 
-  }
+
   const ri = weekIndex % 3;
-  return [{ first: "Ahmed", second: "Yousef", third: "Omar" }, { first: "Yousef", second: "Omar", third: "Ahmed" }, { first: "Omar", second: "Ahmed", third: "Yousef" }][ri];
+  return rotationDefault[ri];
 }
 
 function generateSchedule() {
